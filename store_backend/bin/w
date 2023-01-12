@@ -1,0 +1,12 @@
+# watch
+# $1=owner || admin || editor || service || user
+# $2= mongo || pg
+
+export ENV=dev_$1_$2
+if [ "$1" == "mongo" -o "$2" == "mongo" ]
+then
+  echo "start watching, with mongo db"
+else
+  echo "start watching, with pg db"
+fi
+tsc-watch --onSuccess "node build/server.js"

@@ -1,0 +1,19 @@
+{
+  "name": "store",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "keywords": [],
+  "author": "MohabIsBack",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "frontend:install": "cd store_frontend && npm install",
+    "backend:install": "cd store_backend && npm install",
+    "frontend:build": "cd store_frontend && npm run build",
+    "backend:build": "cd store_backend && npm run build",
+    "lint": "eslint -c ./config/.eslintrc.js --ignore-path ./config/.eslintignore . --ext .ts,.tsx,.js,.jsx",
+    "prettier": "prettier --config ./config/.prettierrc.js --ignore-path ./config/.prettierignore . --write" 
+  }
+}
