@@ -13,6 +13,7 @@
     "backend:install": "cd store_backend && npm install",
     "frontend:build": "cd store_frontend && npm run build",
     "backend:build": "cd store_backend && npm run build",
+    "frontend:deploy": "cd store_frontend && npm run deploy",
     "lint": "eslint -c ./config/.eslintrc.js --ignore-path ./config/.eslintignore . --ext .ts,.tsx,.js,.jsx",
     "prettier": "prettier --config ./config/.prettierrc.js --ignore-path ./config/.prettierignore . --write" 
   }
