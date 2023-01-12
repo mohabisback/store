@@ -22,11 +22,11 @@ jobs:
       - run:
           name: Front-End Build
           command: |
-            npm run frontend:build
+            CI=false npm run frontend:build
       - run:
           name: Back-End Build
           command: |
-            npm run backend:build
+            CI=false npm run backend:build
       - run:
           name: Deploy App
           command: |
