@@ -10,11 +10,11 @@
   },
   "pg_aws": {
     "driver": "pg",
-    "user": { "ENV": "PG_USER" },
-    "password": { "ENV": "PG_PASS" },
-    "host": { "ENV": "PG_AWS_HOST" },
-    "database": { "ENV": "PG_DB" },
-    "port": { "ENV": "PG_PORT" }
+    "user": "mohab",
+    "password": "mohabmohabmohab",
+    "host": "store.c0abv6iza8jb.us-east-1.rds.amazonaws.com",
+    "database": "store",
+    "port": 5432
   },
   "pg_test": {
     "driver": "pg",
