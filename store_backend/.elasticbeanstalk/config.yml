@@ -2,9 +2,6 @@ branch-defaults:
   default:
     environment: dev-editor-pg
     group_suffix: null
-  eb-cli:
-    environment: dev-editor-pg
-    group_suffix: null
 global:
   application_name: store_backend
   branch: null
@@ -15,7 +12,6 @@ global:
   instance_profile: null
   platform_name: null
   platform_version: null
-  profile: eb-cli
   repository: null
   sc: null
   workspace_type: Application
