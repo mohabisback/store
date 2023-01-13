@@ -30,12 +30,12 @@ jobs:
       - run:
           name: Deploy FrontEnd
           command: |
-            npm run frontend:deploy      
+            npm run frontend:deploy    
+      - run:
+          name: Deploy Backend
+          command: |
+            npm run backend:deploy  
       - run:
           name: Migrate Backend
           command: |
             npm run backend:up 
-      - run:
-          name: Deploy Backend
-          command: |
-            npm run backend:deploy

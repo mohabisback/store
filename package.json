@@ -14,8 +14,8 @@
     "frontend:build": "cd store_frontend && npm run build",
     "backend:build": "cd store_backend && npm run build",
     "frontend:deploy": "cd store_frontend && npm run deploy",
-    "backend:up": "cd store_backend && npm run up_aws",
     "backend:deploy": "cd store_backend && npm run deploy:dev-editor-pg",
+    "backend:up": "cd store_backend && npm run up_aws",
     "lint": "eslint -c ./config/.eslintrc.js --ignore-path ./config/.eslintignore . --ext .ts,.tsx,.js,.jsx",
     "prettier": "prettier --config ./config/.prettierrc.js --ignore-path ./config/.prettierignore . --write" 
   }
