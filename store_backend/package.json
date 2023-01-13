@@ -73,12 +73,14 @@
     "test_editor": "SET ENV=test_pg_editor&& db-migrate -e pg_test reset && db-migrate -e pg_test up && jasmine &&SET ENV=test_mongo_editor&& jasmine",
     "table": "db-migrate create migrationFile --sql-file",
     "up": "db-migrate -e pg up",
-    "up_aws": "db-migrate -e pg-aws up",
+    "up_aws": "db-migrate -e pg_aws up",
     "reset": "db-migrate -e pg reset",
     "test_up": "db-migrate -e pg_test up",
     "test_reset": "db-migrate -e pg_test reset",
     "test_drop": "db-migrate db:drop pg_test",
 
-    "deploy:dev-editor-pg": "chmod +x bin/deploy.sh && bin/deploy.sh dev-editor-pg"
+    "deploy:dev-editor-pg": "chmod +x bin/deploy.sh && bin/deploy.sh dev-editor-pg",
+    "env:dev-editor-pg": "chmod +x bin/env.sh && bin/env.sh dev-editor-pg"
+  
   }
 }

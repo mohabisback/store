@@ -8,7 +8,7 @@
     "database": { "ENV": "PG_DB" },
     "port": { "ENV": "PG_PORT" }
   },
-  "pg-aws": {
+  "pg_aws": {
     "driver": "pg",
     "user": { "ENV": "PG_USER" },
     "password": { "ENV": "PG_PASS" },
