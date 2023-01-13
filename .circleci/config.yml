@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   node: circleci/node@4.1.0
   aws-cli: circleci/aws-cli@1.3.1
+  eb: circleci/aws-elastic-beanstalk@1.0.0
 jobs:
   build:
     docker:
@@ -11,6 +12,22 @@ jobs:
       - node/install
       - checkout
       - aws-cli/setup
+      - run:
+          name: Frontend install
+          command: |
+            npm run frontend:install
+      - run:
+          name: Backend install
+          command: |
+            npm run backend:install
+      - run:
+          name: Frontend build
+          command: |
+            CI=false npm run frontend:build
+      - run:
+          name: Backend build
+          command: |
+            CI=false npm run backend:build
  
       - run:
           name: Database migration Up
