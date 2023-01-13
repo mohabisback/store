@@ -38,10 +38,6 @@ jobs:
           command: |
             npm run backend:deploy  
       - run:
-          name: Backend env secrets
-          command: |
-            npm run backend:env 
-      - run:
           name: Database migration Up
           command: |
             npm run backend:up 
