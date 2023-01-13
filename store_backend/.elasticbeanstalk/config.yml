@@ -2,6 +2,9 @@ branch-defaults:
   default:
     environment: dev-editor-pg
     group_suffix: null
+  eb-cli:
+    environment: dev-editor-pg
+    group_suffix: null
 global:
   application_name: store_backend
   branch: null
