@@ -1,7 +1,7 @@
 import { Pool, QueryConfig, QueryResult } from 'pg';
 import { ErrAPI, Status } from '../../ErrAPI';
 
-const { ENV, PG_HOST, PG_PORT, PG_DB, PG_TEST_DB, PG_USER, PG_PASS } = process.env;
+const { ENV, PG_HOST, PG_AWS_HOST, PG_PORT, PG_DB, PG_TEST_DB, PG_USER, PG_PASS } = process.env;
 
 let database: string | undefined;
 switch (ENV?.includes('test')) {
@@ -12,9 +12,18 @@ switch (ENV?.includes('test')) {
     database = PG_DB;
     break;
 }
+let host: string | undefined;
+switch (ENV?.includes('aws')) {
+  case true:
+    host = PG_AWS_HOST;
+    break;
+  default:
+    host = PG_HOST;
+    break;
+}
 const client = new Pool({
   database,
-  host: PG_HOST,
+  host,
   port: parseInt(PG_PORT as string),
   user: PG_USER,
   password: PG_PASS,

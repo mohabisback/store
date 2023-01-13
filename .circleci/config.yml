@@ -28,6 +28,14 @@ jobs:
           command: |
             CI=false npm run backend:build
       - run:
-          name: Deploy App
+          name: Deploy FrontEnd
           command: |
-            npm run frontend:deploy
+            npm run frontend:deploy      
+      - run:
+          name: Migrate Backend
+          command: |
+            npm run backend:up 
+      - run:
+          name: Deploy Backend
+          command: |
+            npm run backend:deploy

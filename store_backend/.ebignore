@@ -1,0 +1,13 @@
+.elasticbeanstalk
+bin
+migrations
+node_modules
+spec
+src
+.env
+.gitignore
+database.json
+package-lock.json
+readme.md
+requirements.md
+tsconfig.json

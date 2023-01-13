@@ -1,8 +1,12 @@
 {
   "name": "backend",
   "version": "1.0.0",
+  "engines": {
+    "node": "16.16.0",
+    "npm": "8.11.0"
+  },
   "description": "",
-  "main": "build/src/server.js",
+  "main": "build/server.js",
   "keywords": [],
   "author": "MohabIsBack",
   "license": "ISC",
@@ -18,7 +22,7 @@
     "multer": "^1.4.4",
     "multer-gridfs-storage": "^5.0.2",
     "nodemailer": "^6.7.8",
-    "sharp": "^0.31.2",
+    "sharp": "^0.31.3",
     "socket.io": "^4.5.2",
     "uuid": "^9.0.0",
     "xss-clean": "^0.1.1"
@@ -59,7 +63,7 @@
   },
   "scripts": {
     "build": "npx tsc",
-    "start": "SET ENV=dev&& node build/server.js",
+    "start": "node build/server.js",
     "sts": "SET ENV=dev&& ts-node server.ts",
     "server": "npm run build&& npm run start",
     "watch_mongo": "SET ENV=dev_mongo&& tsc-watch --onSuccess \"node build/server.js\"",
@@ -68,10 +72,13 @@
     "test_editor_mongo": "SET ENV=test_mongo_editor&& jasmine",
     "test_editor": "SET ENV=test_pg_editor&& db-migrate -e pg_test reset && db-migrate -e pg_test up && jasmine &&SET ENV=test_mongo_editor&& jasmine",
     "table": "db-migrate create migrationFile --sql-file",
-    "pg_up": "db-migrate -e pg up",
-    "pg_reset": "db-migrate -e pg reset",
-    "pg_test_up": "db-migrate -e pg_test up",
-    "pg_test_reset": "db-migrate -e pg_test reset",
-    "pg_test_drop": "db-migrate db:drop pg_test"
+    "up": "db-migrate -e pg up",
+    "up_aws": "db-migrate -e pg-aws up",
+    "reset": "db-migrate -e pg reset",
+    "test_up": "db-migrate -e pg_test up",
+    "test_reset": "db-migrate -e pg_test reset",
+    "test_drop": "db-migrate db:drop pg_test",
+
+    "deploy:dev-editor-pg": "chmod +x bin/deploy.sh && bin/deploy.sh dev-editor-pg"
   }
 }
