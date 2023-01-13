@@ -6,7 +6,7 @@
     "password": { "ENV": "PG_PASS" },
     "host": { "ENV": "PG_HOST" },
     "database": { "ENV": "PG_DB" },
-    "port": { "ENV": "PG_PORT" }
+    "port": 5432
   },
   "pg_aws": {
     "driver": "pg",
@@ -22,7 +22,7 @@
     "password": { "ENV": "PG_PASS" },
     "host": { "ENV": "PG_HOST" },
     "database": { "ENV": "PG_TEST_DB" },
-    "port": { "ENV": "PG_PORT" }
+    "port": 5432
   }
 }
  

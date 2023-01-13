@@ -13,34 +13,7 @@ jobs:
       - checkout
       - aws-cli/setup
       - eb/setup
-      - run:
-          name: Frontend install
-          command: |
-            npm run frontend:install
-      - run:
-          name: Backend install
-          command: |
-            npm run backend:install
-      - run:
-          name: Frontend build
-          command: |
-            CI=false npm run frontend:build
-      - run:
-          name: Backend build
-          command: |
-            CI=false npm run backend:build
-      - run:
-          name: Frontend deploy
-          command: |
-            npm run frontend:deploy    
-      - run:
-          name: Backend deploy
-          command: |
-            npm run backend:deploy  
-      - run:
-          name: Backend env secrets
-          command: |
-            npm run backend:env
+ 
       - run:
           name: Database migration Up
           command: |
