@@ -1,5 +1,5 @@
 
-CREATE TABLE "products"(
+CREATE TABLE IF NOT EXISTS "products"(
   "id" INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   "user_id" INTEGER,
   "title" VARCHAR(200),
@@ -25,7 +25,7 @@ CREATE TABLE "products"(
   "grams" TEXT,
   "tsv" tsvector
 );
-
+ALTER TABLE "products" ADD CONSTRAINT "user_fk" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT;
 --ALTER TABLE products ADD COLUMN if not exists tsv tsvector;
 --
 -- UPDATE products SET  

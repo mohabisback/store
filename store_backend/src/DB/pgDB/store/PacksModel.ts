@@ -1,10 +1,20 @@
 import { Ref } from '../../../interfaces/general';
 import { Pack } from '../../../interfaces/store';
+import { dbResetOrUp } from '../../dbState';
 import CommonModel from '../CommonModel';
+import { connRelease } from '../pgClient';
 
 const table = 'packs';
 
 export default class PacksModel {
+  //for new collection schema settings
+  static async migrationsUp():Promise<void>{
+    try{
+      
+    } catch (err){
+
+    }
+  }
   //Get Count of Documents with specific props
   static async getPacksCount(props: Pack): Promise<number> {
     return await CommonModel.getCount(table, props);

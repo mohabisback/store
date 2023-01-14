@@ -1,6 +1,8 @@
 import { Facets, Ref } from '../../../interfaces/general';
 import { Product } from '../../../interfaces/store';
+import { dbResetOrUp } from '../../dbState';
 import CommonModel from '../CommonModel';
+import { connRelease } from '../pgClient';
 
 const table = 'products';
 

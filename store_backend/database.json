@@ -2,27 +2,61 @@
   "defaultEnv": "pg",
   "pg": {
     "driver": "pg",
-    "user": { "ENV": "PG_USER" },
-    "password": { "ENV": "PG_PASS" },
-    "host": { "ENV": "PG_HOST" },
-    "database": { "ENV": "PG_DB" },
-    "port": 5432
+    "user": {
+      "ENV": "PG_USER"
+    },
+    "password": {
+      "ENV": "PG_PASS"
+    },
+    "host": {
+      "ENV": "PG_HOST"
+    },
+    "database": {
+      "ENV": "PG_DB"
+    },
+    "port": 5432,
+    "date": 20230104134044
   },
   "pg_aws": {
     "driver": "pg",
-    "user": "mohab",
-    "password": "mohabmohabmohab",
-    "host": "store.c0abv6iza8jb.us-east-1.rds.amazonaws.com",
-    "database": "store",
-    "port": 5432
+    "user": {
+      "ENV": "PG_USER"
+    },
+    "password": {
+      "ENV": "PG_PASS"
+    },
+    "host": {
+      "ENV": "PG_AWS_HOST"
+    },
+    "database": {
+      "ENV": "PG_DB"
+    },
+    "port": 5432,
+    "date": 0
   },
   "pg_test": {
     "driver": "pg",
-    "user": { "ENV": "PG_USER" },
-    "password": { "ENV": "PG_PASS" },
-    "host": { "ENV": "PG_HOST" },
-    "database": { "ENV": "PG_TEST_DB" },
-    "port": 5432
+    "user": {
+      "ENV": "PG_USER"
+    },
+    "password": {
+      "ENV": "PG_PASS"
+    },
+    "host": {
+      "ENV": "PG_HOST"
+    },
+    "database": {
+      "ENV": "PG_TEST_DB"
+    },
+    "port": 5432,
+    "date": 0
+  },
+  "mongo": {
+    "driver": "mongo",
+    "date": 20221212000000
+  },
+  "mongo_test": {
+    "driver": "mongo",
+    "date": 0
   }
 }
- 

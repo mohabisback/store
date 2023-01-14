@@ -3,7 +3,7 @@ import { Status, ErrAPI } from '../../../ErrAPI';
 import { Address } from '../../../interfaces/users';
 import CommonModel from '../CommonModel';
 import { noConnMess } from '../../../ErrAPI';
-import { dbName } from '../mongoClient';
+import { dbName, dbResetOrUp } from '../../dbState';
 import { Ref } from '../../../interfaces/general';
 
 const collName = 'addresses';
@@ -20,7 +20,6 @@ export default class AddressesModel {
       throw new ErrAPI(Status.BAD_GATEWAY, `Failed coll handle in ${collName} model: ${err}`);
     }
   }
-
   //Get Count of Documents with specific props
   static async getAddressesCount(props: {}): Promise<number> {
     if (!coll) {

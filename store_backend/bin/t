@@ -1,4 +1,7 @@
-#$3= reset test (delete data bases)
+# test
+# $1= owner || admin || editor || service || user
+# $2= mongo || pg
+# $3= reset || '' reset or not database
 export ENV=test_$1_$2_$3
 if [ "$1" == "pg" -o "$2" == "pg" -o "$3" == "pg" ]; then
   echo 'testing pg, ENV = test_'$1'_'$2'_'$3  

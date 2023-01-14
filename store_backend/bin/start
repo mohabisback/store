@@ -1,3 +1,0 @@
-export ENV=dev_$1_$2
-npx tsc
-node build/server.js

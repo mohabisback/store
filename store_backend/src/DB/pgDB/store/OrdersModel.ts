@@ -4,6 +4,7 @@ import { connRelease } from '../pgClient';
 import { sqlUpdate } from '../sqlFactory';
 import CommonModel from '../CommonModel';
 import { Ref } from '../../../interfaces/general';
+import { dbResetOrUp } from '../../dbState';
 
 const table = 'orders';
 

@@ -9,3 +9,4 @@ CREATE TABLE "orders"(
   "shipCost" integer,
   "date" timestamp
   );
+  ALTER TABLE "orders" ADD CONSTRAINT "user_fk" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT;

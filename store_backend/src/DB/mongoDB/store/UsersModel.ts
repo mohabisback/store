@@ -3,7 +3,7 @@ import { Status, ErrAPI } from '../../../ErrAPI';
 import { User } from '../../../interfaces/users';
 import CommonModel from '../CommonModel';
 import { noConnMess } from '../../../ErrAPI';
-import { dbName } from '../mongoClient';
+import { dbName, dbResetOrUp } from '../../dbState';
 import { Ref } from '../../../interfaces/general';
 
 const collName = 'users';

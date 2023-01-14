@@ -1,6 +1,7 @@
 import { Status, ErrAPI } from '../../../ErrAPI';
 import { Ref } from '../../../interfaces/general';
 import { User } from '../../../interfaces/users';
+import { dbResetOrUp } from '../../dbState';
 import CommonModel from '../CommonModel';
 import { connRelease } from '../pgClient';
 import { sqlUpdate } from '../sqlFactory';

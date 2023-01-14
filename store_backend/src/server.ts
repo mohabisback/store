@@ -14,8 +14,9 @@ import xss from 'xss-clean';
 import { Server, Socket } from 'socket.io';
 import AuthenticateTokens from './routers/users/tokensCtrls/AuthenticateTokens';
 import { socketSession, socketSessionsArr } from './utils/socketSession';
-import connectMongoClient from './DB/mongoDB/mongoClient';
+import startMongoClient from './DB/mongoDB/mongoClient';
 import { ErrHandler, ErrAPI, Status } from './ErrAPI';
+import startPgClient from './DB/pgDB/pgClient';
 //Server
 const app = express();
 app.set('trust proxy', 1);
@@ -65,7 +66,8 @@ app.use(ErrHandler);
 
 const server =  http.createServer(app);
 if (!process.env.ENV || !process.env.ENV?.includes('test')){
-  connectMongoClient();
+  startMongoClient();
+  startPgClient();
   server.listen(port, () => {
     console.log(`Server Listening, Port ${port}`);
   });

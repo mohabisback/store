@@ -1,6 +1,9 @@
+import { Pool } from 'pg';
 import { Ref } from '../../../interfaces/general';
 import { Address } from '../../../interfaces/users';
+import { dbName, dbResetOrUp } from '../../dbState';
 import CommonModel from '../CommonModel';
+import { connRelease } from '../pgClient';
 
 const table = 'addresses';
 

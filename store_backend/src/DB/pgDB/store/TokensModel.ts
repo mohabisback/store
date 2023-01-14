@@ -1,10 +1,20 @@
 import { Ref } from '../../../interfaces/general';
 import { TokenSecret } from '../../../interfaces/users';
+import { dbResetOrUp } from '../../dbState';
 import CommonModel from '../CommonModel';
+import { connRelease } from '../pgClient';
 
 const table = 'tokens';
 
 export default class TokensModel {
+  //for new collection schema settings
+  static async migrationsUp():Promise<void>{
+    try{
+      
+    } catch (err){
+
+    }
+  }
   //under construction
   static async checkTokenSecrets(props: {}): Promise<number> {
     return await CommonModel.getCount(table, props);
