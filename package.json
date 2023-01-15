@@ -13,10 +13,11 @@
     "backend:install": "cd store_backend && npm install",
     "frontend:build": "cd store_frontend && npm run build",
     "backend:build": "cd store_backend && npm run build",
+    "frontend:test": "cd store_frontend && npm run test",
+    "backend:test": "cd store_backend && npm run test_editor_pg",
     "frontend:deploy": "cd store_frontend && npm run deploy",
     "backend:deploy": "cd store_backend && npm run deploy:dev-editor-pg",
     "backend:env": "cd store_backend && npm run env:dev-editor-pg",
-    "backend:up": "cd store_backend && npm run up_aws",
     "lint": "eslint -c ./config/.eslintrc.js --ignore-path ./config/.eslintignore . --ext .ts,.tsx,.js,.jsx",
     "prettier": "prettier --config ./config/.prettierrc.js --ignore-path ./config/.prettierignore . --write" 
   }
