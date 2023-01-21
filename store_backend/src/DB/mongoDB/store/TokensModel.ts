@@ -1,10 +1,10 @@
 import { Collection, MongoClient } from 'mongodb';
 import { Status, ErrAPI } from '../../../ErrAPI';
-import { TokenSecret } from '../../../interfaces/users';
+import { TyTokenSecret } from '../../../types/users';
 import CommonModel from '../CommonModel';
 import { noConnMess } from '../../../ErrAPI';
 import { dbName, dbResetOrUp } from '../../dbState';
-import { Ref } from '../../../interfaces/general';
+import { TyRef } from '../../../types/general';
 
 export const collName = 'tokens';
 export let coll: Collection;
@@ -28,14 +28,14 @@ export default class TokensModel {
     return await CommonModel.getCount(coll, props);
   }
 
-  static async addTokenSecret(tokenSecret: TokenSecret): Promise<number> {
+  static async addTokenSecret(tokenSecret: TyTokenSecret): Promise<number> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
     return await CommonModel.AddOne(coll, tokenSecret);
   }
 
-  static async replaceTokenSecret(newTokenSecret: TokenSecret, oldTokenSecret: TokenSecret): Promise<boolean> {
+  static async replaceTokenSecret(newTokenSecret: TyTokenSecret, oldTokenSecret: TyTokenSecret): Promise<boolean> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
@@ -45,23 +45,27 @@ export default class TokensModel {
 
   //get token secret according to email & secret
 
-  static async getSomeTokenSecrets(
-    props: TokenSecret,
+  static async getManyTokenSecrets(
+    props: TyTokenSecret,
     limit?: number,
     page?: number,
     sort?: {},
-  ): Promise<TokenSecret[]> {
+  ): Promise<TyTokenSecret[]> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getSome(coll, props)) as TokenSecret[];
+    return (await CommonModel.getMany(coll, props)) as TyTokenSecret[];
   }
 
-  static async getTokenSecret(findProps: TokenSecret, projProps?: TokenSecret, refs?:Ref[]): Promise<TokenSecret | null> {
+  static async getTokenSecret(
+    findProps: TyTokenSecret,
+    projProps?: TyTokenSecret,
+    refs?: TyRef[],
+  ): Promise<TyTokenSecret | null> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getOne(coll, findProps, projProps, refs)) as TokenSecret | null;
+    return (await CommonModel.getOne(coll, findProps, projProps, refs)) as TyTokenSecret | null;
   }
 
   static async expireTokenSecret(props: {}): Promise<boolean> {

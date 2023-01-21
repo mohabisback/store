@@ -1,1 +1,1 @@
-DROP TABLE "orderItems";
+DROP TABLE IF EXISTS "orderItems";

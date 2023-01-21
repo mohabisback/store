@@ -39,12 +39,7 @@ export const ErrHandler = (err: any, req: Request, res: Response, next: NextFunc
   let status: Status = err.status || Status.INTERNAL_SERVER_ERROR;
   let message: string = err.message || 'Internal Server Error';
 
-  res.status(status).send(`
-
-  <h2>Error ${status}</h2>
-  <h2>${message}</h2>
-  
-  `);
+  res.status(status).send({ message });
 };
 
 export const noConnMess = (db: string): string => `No connection to ${db} database`;

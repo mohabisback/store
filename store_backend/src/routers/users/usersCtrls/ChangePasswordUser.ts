@@ -1,7 +1,7 @@
 import { ErrAPI, Status } from '../../../ErrAPI';
-import { EmailFormat, NextFunction, Request, Response } from '../../../interfaces/general';
+import { EmailFormat, NextFunction, Request, Response } from '../../../types/general';
 import bcrypt from 'bcrypt';
-import { User } from '../../../interfaces/users';
+import { TyUser } from '../../../types/users';
 
 //import UsersModel from '../../../DB/mongoDB/store/UsersModel' //mongoDB model
 //import UsersModel from '../../../DB/pgDB/store/UsersModel' //pgDB model
@@ -10,8 +10,8 @@ const UsersModel = require(`../../../DB/${
 }/store/UsersModel`).default;
 
 const ChangePasswordUser = async (req: Request, res: Response, next: NextFunction) => {
-  let newPassword:string|undefined = req.body.user.newPassword
-  let oldPassword:string|undefined = req.body.user.oldPassword
+  let newPassword: string | undefined = req.body.user.newPassword;
+  let oldPassword: string | undefined = req.body.user.oldPassword;
   if (!newPassword || !oldPassword) {
     throw new ErrAPI(Status.BAD_REQUEST, 'Missing info.');
   }
@@ -19,7 +19,7 @@ const ChangePasswordUser = async (req: Request, res: Response, next: NextFunctio
   const { emailOrId } = req.params;
   const id = parseInt(emailOrId);
   //get user from database
-  let user: User | null;
+  let user: TyUser | null;
   if (Number.isInteger(id)) {
     user = await UsersModel.getUser({ id }, undefined, undefined);
   } else if (emailOrId.match(EmailFormat)) {

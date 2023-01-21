@@ -1,6 +1,6 @@
 import { ErrAPI, Status } from '../../../ErrAPI';
-import { Request, Response, NextFunction } from '../../../interfaces/general';
-import { Address, AddressTemp } from '../../../interfaces/users';
+import { Request, Response, NextFunction } from '../../../types/general';
+import { TyAddress, TmAddress } from '../../../types/users';
 import { cleanObject } from '../../_functions';
 
 //import UsersModel from '../../../DB/mongoDB/store/UsersModel' //mongoDB model
@@ -18,13 +18,16 @@ const AddressesModel = require(`../../../DB/${
 const AddAddress = async (req: Request, res: Response, next: NextFunction) => {
   //get only allowed props from body.address
 
-  let address:Address|undefined = req.body.address;
-  if(!address){throw new ErrAPI(Status.BAD_REQUEST, 'Missing info.');}
-  const unEditables: (keyof Address)[] = ['id'];
-  address = cleanObject(address, AddressTemp, unEditables);
+  let address: TyAddress | undefined = req.body.address;
+  if (!address) {
+    throw new ErrAPI(Status.BAD_REQUEST, 'Missing info.');
+  }
+  const unEditables: (keyof TyAddress)[] = ['id'];
+  address = cleanObject(address, TmAddress, unEditables);
 
   //check essentials
-  if (!address ||
+  if (
+    !address ||
     !address.user_id ||
     !address.fullName ||
     !address.state ||

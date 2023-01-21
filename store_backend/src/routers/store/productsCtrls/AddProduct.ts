@@ -1,6 +1,6 @@
 import { ErrAPI, Status } from '../../../ErrAPI';
-import { Request, Response, NextFunction } from '../../../interfaces/general';
-import { Product, ProductTemp } from '../../../interfaces/store';
+import { Request, Response, NextFunction } from '../../../types/general';
+import { TyProduct, TmProduct } from '../../../types/store';
 import { cleanObject, gramIt } from '../../_functions';
 
 //import ProductsModel from '../../../DB/mongoDB/store/ProductsModel' //mongoDB model
@@ -11,11 +11,13 @@ const ProductsModel = require(`../../../DB/${
 
 const AddProduct = async (req: Request, res: Response, next: NextFunction) => {
   //get only allowed props from body.product
-  let product:Product|undefined = req.body.product ;
-  if(!product){throw new ErrAPI(Status.BAD_REQUEST, 'Missing info.')}
+  let product: TyProduct | undefined = req.body.product;
+  if (!product) {
+    throw new ErrAPI(Status.BAD_REQUEST, 'Missing info.');
+  }
 
-  const unEditables: (keyof Product)[] = ['id'];
-  product = cleanObject(product, ProductTemp, unEditables);
+  const unEditables: (keyof TyProduct)[] = ['id'];
+  product = cleanObject(product, TmProduct, unEditables);
 
   //check essentials
   if (!product || !product.title || !product.price || !product.img1) {
@@ -25,7 +27,7 @@ const AddProduct = async (req: Request, res: Response, next: NextFunction) => {
   //set defaults
   product.ordersCount = 0;
   product.viewsCount = 0;
-  product.grams = gramIt(product.title + ' ' + (product.keywords ? product.keywords : ''))
+  product.grams = gramIt(product.title + ' ' + (product.keywords ? product.keywords : ''));
 
   //After Insertion actions: title & tokens
   product.id = await ProductsModel.AddProduct(product);

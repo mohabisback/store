@@ -1,10 +1,10 @@
 import { Collection, MongoClient } from 'mongodb';
 import { Status, ErrAPI } from '../../../ErrAPI';
-import { Address } from '../../../interfaces/users';
+import { TyAddress } from '../../../types/users';
 import CommonModel from '../CommonModel';
 import { noConnMess } from '../../../ErrAPI';
 import { dbName, dbResetOrUp } from '../../dbState';
-import { Ref } from '../../../interfaces/general';
+import { TyRef } from '../../../types/general';
 
 const collName = 'addresses';
 let coll: Collection;
@@ -29,31 +29,38 @@ export default class AddressesModel {
   }
 
   //checks Email already exists then adds address, returns id
-  static async AddAddress(address: Address): Promise<number> {
+  static async AddAddress(address: TyAddress): Promise<number> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
     return await CommonModel.AddOne(coll, address);
   }
 
-  static async getAllAddresses(search?: string, findProps: Address = {}, projProps: Address = {}, limit?: number, page?: number, sort?: {}): Promise<Address[]> {
+  static async searchAddresses(
+    search?: string,
+    findProps: TyAddress = {},
+    projProps: TyAddress = {},
+    limit?: number,
+    page?: number,
+    sort?: {},
+  ): Promise<TyAddress[]> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getAll(coll, search, findProps, projProps, limit, page, sort)) as Address[];
+    return (await CommonModel.search(coll, search, findProps, projProps, limit, page, sort)) as TyAddress[];
   }
 
-  static async getSomeAddresses(props: Address, limit?: number, page?: number, sort?: {}): Promise<Address[]> {
+  static async getManyAddresses(props: TyAddress, limit?: number, page?: number, sort?: {}): Promise<TyAddress[]> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getSome(coll, props)) as Address[];
+    return (await CommonModel.getMany(coll, props)) as TyAddress[];
   }
-  static async getAddress(findProps: Address, projProps?: Address, refs?:Ref[]): Promise<Address | null> {
+  static async getAddress(findProps: TyAddress, projProps?: TyAddress, refs?: TyRef[]): Promise<TyAddress | null> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getOne(coll, findProps, projProps, refs)) as Address | null;
+    return (await CommonModel.getOne(coll, findProps, projProps, refs)) as TyAddress | null;
   }
 
   static async updateAddress(findProps: {}, updateProps: {}): Promise<boolean> {

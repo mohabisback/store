@@ -1,10 +1,10 @@
 import { Collection, MongoClient } from 'mongodb';
 import { Status, ErrAPI } from '../../../ErrAPI';
-import { Pack } from '../../../interfaces/store';
+import { TyPack } from '../../../types/store';
 import CommonModel from '../CommonModel';
 import { noConnMess } from '../../../ErrAPI';
 import { dbName, dbResetOrUp } from '../../dbState';
-import { Ref } from '../../../interfaces/general';
+import { TyRef } from '../../../types/general';
 
 const collName = 'packs';
 let coll: Collection;
@@ -22,7 +22,7 @@ export default class PacksModel {
   }
 
   //Get Count of Documents with specific props
-  static async getPacksCount(props: Pack): Promise<number> {
+  static async getPacksCount(props: TyPack): Promise<number> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
@@ -30,35 +30,42 @@ export default class PacksModel {
   }
 
   //Add Pack
-  static async AddPack(pack: Pack): Promise<number> {
+  static async AddPack(pack: TyPack): Promise<number> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
     return await CommonModel.AddOne(coll, pack);
   }
 
-  static async getAllPacks(search?: string, findProps: Pack = {}, projProps: Pack = {}, limit?: number, page?: number, sort?: {}): Promise<Pack[]> {
+  static async searchPacks(
+    search?: string,
+    findProps: TyPack = {},
+    projProps: TyPack = {},
+    limit?: number,
+    page?: number,
+    sort?: {},
+  ): Promise<TyPack[]> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getAll(coll, search, findProps, projProps, limit, page, sort)) as Pack[];
+    return (await CommonModel.search(coll, search, findProps, projProps, limit, page, sort)) as TyPack[];
   }
 
-  static async getSomePacks(props: Pack, limit?: number, page?: number, sort?: {}): Promise<Pack[]> {
+  static async getManyPacks(props: TyPack, limit?: number, page?: number, sort?: {}): Promise<TyPack[]> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getSome(coll, props)) as Pack[];
+    return (await CommonModel.getMany(coll, props)) as TyPack[];
   }
 
-  static async getPack(findProps: Pack, projProps?: Pack, refs?:Ref[]): Promise<Pack | null> {
+  static async getPack(findProps: TyPack, projProps?: TyPack, refs?: TyRef[]): Promise<TyPack | null> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getOne(coll, findProps, projProps, refs)) as Pack | null;
+    return (await CommonModel.getOne(coll, findProps, projProps, refs)) as TyPack | null;
   }
 
-  static async updatePack(findProps: Pack, updateProps: Pack): Promise<boolean> {
+  static async updatePack(findProps: TyPack, updateProps: TyPack): Promise<boolean> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }

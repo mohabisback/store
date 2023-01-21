@@ -39,7 +39,11 @@ const getNewId = async (coll: Collection, incBy = 1): Promise<number[]> => {
     }
     try {
       //insert the serial document, with the new serial
-      await coll.updateOne({ id: -1}, {$set:{serial, serial_id_document: 'This document is for counting serial id' }},{upsert: true});
+      await coll.updateOne(
+        { id: -1 },
+        { $set: { serial, serial_id_document: 'This document is for counting serial id' } },
+        { upsert: true },
+      );
     } catch (err) {}
   }
   const serials: number[] = [];

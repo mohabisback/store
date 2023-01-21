@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS "products"(
   "viewsCount" INTEGER,
   "ordersCount" INTEGER,
   "used" BOOLEAN,
-  "category" VARCHAR(20),
+  "category_id" INTEGER,
   "sizes" VARCHAR(20)[],
   "colors" VARCHAR(20)[],
   "keywords" VARCHAR(300),
@@ -26,6 +26,8 @@ CREATE TABLE IF NOT EXISTS "products"(
   "tsv" tsvector
 );
 ALTER TABLE "products" ADD CONSTRAINT "user_fk" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT;
+ALTER TABLE "products" ADD CONSTRAINT "category_fk" FOREIGN KEY ("category_id") REFERENCES "categories"("id") ON DELETE RESTRICT;
+
 --ALTER TABLE products ADD COLUMN if not exists tsv tsvector;
 --
 -- UPDATE products SET  
@@ -46,9 +48,8 @@ AS $$
     BEGIN
       new.tsv := --new is the new row
          setweight(to_tsvector('english', COALESCE(new.title,'')), 'A') ||
-         setweight(to_tsvector('english', COALESCE(new.keywords,'') || ' ' || COALESCE(new.category,'')), 'B') ||
-         setweight(to_tsvector('english', COALESCE(new.grams,'') || ' ' || COALESCE(new.description,'')), 'C') ||
-         setweight(to_tsvector('english', COALESCE(array_to_string(new.colors || new.sizes,' ', ''),'')), 'D');
+         setweight(to_tsvector('english', COALESCE(new.keywords,'')), 'B') ||
+         setweight(to_tsvector('english', COALESCE(new.grams,'') || ' ' || COALESCE(new.description,'')), 'C');
       return new;
     END;
 $$ LANGUAGE plpgsql;

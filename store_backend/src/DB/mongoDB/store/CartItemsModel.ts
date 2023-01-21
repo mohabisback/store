@@ -1,10 +1,10 @@
 import { Collection, MongoClient } from 'mongodb';
 import { Status, ErrAPI } from '../../../ErrAPI';
-import { CartItem } from '../../../interfaces/store';
+import { TyCartItem } from '../../../types/store';
 import CommonModel from '../CommonModel';
 import { noConnMess } from '../../../ErrAPI';
 import { dbName, dbResetOrUp } from '../../dbState';
-import { Ref } from '../../../interfaces/general';
+import { TyRef } from '../../../types/general';
 
 const collName = 'cartItems';
 let coll: Collection;
@@ -30,33 +30,45 @@ export default class CartItemsModel {
   }
 
   //checks Email already exists then adds cartItem, returns id
-  static async AddCartItem(cartItem: CartItem): Promise<number> {
+  static async AddCartItem(cartItem: TyCartItem): Promise<number> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
     return await CommonModel.AddOne(coll, cartItem);
   }
 
-  static async getAllCartItems(search?: string, findProps: CartItem = {}, projProps: CartItem = {}, limit?: number, page?: number, sort?: {}): Promise<CartItem[]> {
+  static async searchCartItems(
+    search?: string,
+    findProps: TyCartItem = {},
+    projProps: TyCartItem = {},
+    limit?: number,
+    page?: number,
+    sort?: {},
+  ): Promise<TyCartItem[]> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getAll(coll, search, findProps, projProps, limit, page, sort)) as CartItem[];
+    return (await CommonModel.search(coll, search, findProps, projProps, limit, page, sort)) as TyCartItem[];
   }
 
-  static async getSomeCartItems(findProps: CartItem, projProps: CartItem={}, limit?: number, page?: number, sort?: {}): Promise<CartItem[]> {
+  static async getManyCartItems(
+    findProps: TyCartItem,
+    projProps: TyCartItem = {},
+    limit?: number,
+    page?: number,
+    sort?: {},
+  ): Promise<TyCartItem[]> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getSome(coll, findProps, projProps, limit, page, sort)) as CartItem[];
+    return (await CommonModel.getMany(coll, findProps, projProps, limit, page, sort)) as TyCartItem[];
   }
 
-
-  static async getCartItem(findProps: CartItem, projProps?: CartItem, refs?:Ref[]): Promise<CartItem | null> {
+  static async getCartItem(findProps: TyCartItem, projProps?: TyCartItem, refs?: TyRef[]): Promise<TyCartItem | null> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getOne(coll, findProps, projProps, refs)) as CartItem | null;
+    return (await CommonModel.getOne(coll, findProps, projProps, refs)) as TyCartItem | null;
   }
 
   static async updateCartItem(findProps: {}, updateProps: {}): Promise<boolean> {
@@ -73,32 +85,37 @@ export default class CartItemsModel {
     return await CommonModel.deleteOne(coll, props);
   }
 
-  static async cartItem(cartItem:CartItem):Promise<CartItem[]>{
+  static async cartItem(cartItem: TyCartItem): Promise<TyCartItem[]> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    const {user_id, product_id, quantity, price, discount} = cartItem
-    const date = new Date()
-    let result: any
-    try{
-      if (quantity){
-        
-        result = (await coll.findOneAndUpdate(
-          {user_id, product_id},
-          {$set:{quantity, price, discount, date}},
-          {upsert: true, returnDocument: 'after', projection: {_id: 0}})).value
+    const { user_id, product_id, quantity, price, discount } = cartItem;
+    const date = new Date();
+    let result: any;
+    try {
+      if (quantity) {
+        result = (
+          await coll.findOneAndUpdate(
+            { user_id, product_id },
+            { $set: { quantity, price, discount, date } },
+            { upsert: true, returnDocument: 'after', projection: { _id: 0 } },
+          )
+        ).value;
       } else {
-        result = await coll.deleteMany({user_id, product_id})
+        result = await coll.deleteMany({ user_id, product_id });
       }
-    } catch (err){
-      console.log('my error: ', err)
+    } catch (err) {
+      console.log('my error: ', err);
       throw new ErrAPI(Status.BAD_GATEWAY, `Database Error, Can't update ${coll.collectionName} document.`);
     }
-    try{
-      const final =(await coll.find({user_id}, { projection: { _id: 0 } }).sort({date:1}).toArray()) as CartItem[] 
+    try {
+      const final = (await coll
+        .find({ user_id }, { projection: { _id: 0 } })
+        .sort({ date: 1 })
+        .toArray()) as TyCartItem[];
       return final;
-    } catch (err){ 
-      console.log(err)
+    } catch (err) {
+      console.log(err);
       throw new ErrAPI(Status.BAD_GATEWAY, `Database Error, Can't get updated ${coll.collectionName} documents.`);
     }
   }

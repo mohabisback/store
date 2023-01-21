@@ -1,10 +1,10 @@
 import { Collection, MongoClient, UpdateResult } from 'mongodb';
 import { Status, ErrAPI } from '../../../ErrAPI';
-import { Order } from '../../../interfaces/store';
+import { TyOrder } from '../../../types/store';
 import CommonModel from '../CommonModel';
 import { noConnMess } from '../../../ErrAPI';
 import { dbName, dbResetOrUp } from '../../dbState';
-import { Ref } from '../../../interfaces/general';
+import { TyRef } from '../../../types/general';
 
 const collName = 'orders';
 let coll: Collection;
@@ -22,7 +22,7 @@ export default class OrdersModel {
   }
 
   //Get Count of Documents with specific props
-  static async getOrdersCount(props: Order): Promise<number> {
+  static async getOrdersCount(props: TyOrder): Promise<number> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
@@ -30,35 +30,42 @@ export default class OrdersModel {
   }
 
   //Add Order
-  static async AddOrder(order: Order): Promise<number> {
+  static async AddOrder(order: TyOrder): Promise<number> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
     return await CommonModel.AddOne(coll, order);
   }
 
-  static async getAllOrders(search?: string, findProps: Order = {}, projProps: Order = {}, limit?: number, page?: number, sort?: {}): Promise<Order[]> {
+  static async searchOrders(
+    search?: string,
+    findProps: TyOrder = {},
+    projProps: TyOrder = {},
+    limit?: number,
+    page?: number,
+    sort?: {},
+  ): Promise<TyOrder[]> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getAll(coll, search, findProps, projProps, limit, page, sort)) as Order[];
+    return (await CommonModel.search(coll, search, findProps, projProps, limit, page, sort)) as TyOrder[];
   }
 
-  static async getSomeOrders(props: Order, limit?: number, page?: number, sort?: {}): Promise<Order[]> {
+  static async getManyOrders(props: TyOrder, limit?: number, page?: number, sort?: {}): Promise<TyOrder[]> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getSome(coll, props)) as Order[];
-  }
-  
-  static async getOrder(findProps: Order, projProps?: Order, refs?:Ref[]): Promise<Order | null> {
-    if (!coll) {
-      throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
-    }
-    return (await CommonModel.getOne(coll, findProps, projProps, refs)) as Order | null;
+    return (await CommonModel.getMany(coll, props)) as TyOrder[];
   }
 
-  static async updateOrder(findProps: Order, updateProps: Order): Promise<boolean> {
+  static async getOrder(findProps: TyOrder, projProps?: TyOrder, refs?: TyRef[]): Promise<TyOrder | null> {
+    if (!coll) {
+      throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
+    }
+    return (await CommonModel.getOne(coll, findProps, projProps, refs)) as TyOrder | null;
+  }
+
+  static async updateOrder(findProps: TyOrder, updateProps: TyOrder): Promise<boolean> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }

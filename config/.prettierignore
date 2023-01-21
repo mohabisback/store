@@ -1,2 +1,4 @@
-node_modules
-build
+../store_backend/node_modules
+../store_backend/build
+../store_frontend/node_modules
+../store_frontend/build

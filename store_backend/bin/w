@@ -4,12 +4,12 @@
 # $3= reset || '' reset or not database
 export ENV=dev_$1_$2_$3
 if [ "$1" == "pg" -o "$2" == "pg" -o "$3" == "pg" ]; then
-  echo 'watching, ENV = test_'$1'_'$2'_'$3  
+  echo 'watching, ENV = dev_'$1'_'$2'_'$3  
   if [ "$1" == "reset" -o "$2" == "reset" -o "$3" == "reset" ]; then
     echo 'resetting pg databse...'
   fi
 elif [ "$1" == "mongo" -o "$2" == "mongo" -o "$3" == "mongo" ]; then
-  echo 'watching, ENV = test_'$1'_'$2'_'$3
+  echo 'watching, ENV = dev_'$1'_'$2'_'$3
   if [ "$1" == "reset" -o "$2" == "reset" -o "$3" == "reset" ]; then
     echo 'resetting mongo databse...'
   fi

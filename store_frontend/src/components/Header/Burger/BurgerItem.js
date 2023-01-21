@@ -1,86 +1,105 @@
-import { useState, useEffect, useRef } from "react";
-import BurgerDropdown from './BurgerDropdown.js'
-import { NavLink } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useState, useEffect, useRef } from 'react';
+import BurgerDropdown from './BurgerDropdown.js';
+import { NavLink } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import AuthorizeItem from '../../AuthorizeItem.js';
 
-const BurgerItem = ({ item, depthLevel, resetBurger, setResetBurger}) => {
+const BurgerItem = ({ item, depthLevel, resetBurger, setResetBurger }) => {
   const [dropdown, setDropdown] = useState(false);
 
   //Reset dropdowns when a link is pressed
-  useEffect(() =>{
-    setDropdown(false)
-  },[resetBurger]);
+  useEffect(() => {
+    setDropdown(false);
+  }, [resetBurger]);
 
   //close opened dropdown when click outside it
   let burgerItemRef = useRef();
   useEffect(() => {
     const handler = (event) => {
-     if (dropdown && burgerItemRef.current && !burgerItemRef.current.contains(event.target)) {
-      //remove dropdown from this menu item
-      setDropdown(false);
-     }
+      if (dropdown && burgerItemRef.current && !burgerItemRef.current.contains(event.target)) {
+        //remove dropdown from this menu item
+        setDropdown(false);
+      }
     };
-    document.addEventListener("mousedown", handler);
-    document.addEventListener("touchstart", handler);
+    document.addEventListener('mousedown', handler);
+    document.addEventListener('touchstart', handler);
     return () => {
-     // Cleanup the event listener
-     document.removeEventListener("mousedown", handler);
-     document.removeEventListener("touchstart", handler);
+      // Cleanup the event listener
+      document.removeEventListener('mousedown', handler);
+      document.removeEventListener('touchstart', handler);
     };
-   }, [dropdown]);
+  }, [dropdown]);
 
-   const liClassName = (depthLevel > 0 ? 'burger-dropdown-item' : 'burger-item')
-  
-    let arrowDirection = 'right'
-    if (window.innerWidth < 970) {
-      arrowDirection = dropdown ? 'down': 'right'
-    } else {
-      arrowDirection = depthLevel > 0 ? 'right': 'down'
-    }
+  const liClassName = depthLevel > 0 ? 'burger-dropdown-item' : 'burger-item';
 
-    return (
-    <li className={liClassName} ref={burgerItemRef}
-    onMouseEnter={(e)=>{window.innerWidth > 970 && setDropdown(true);}}
-    onMouseLeave={(e)=>{window.innerWidth > 970 && setDropdown(false);}}
+  let arrowDirection = 'right';
+  if (window.innerWidth < 970) {
+    arrowDirection = dropdown ? 'down' : 'right';
+  } else {
+    arrowDirection = depthLevel > 0 ? 'right' : 'down';
+  }
+
+  return (
+    
+    <AuthorizeItem roles = {item?.roles}>
+    <li
+      className={liClassName}
+      ref={burgerItemRef}
     >
       {item.submenu ? (
         <>
-          <NavLink className={'burger-link'}
+          <NavLink
+            className={'burger-link'}
             to='#'
-            aria-haspopup="menu"
-            aria-expanded={dropdown ? "true" : "false"}
-            onClick={() => {setDropdown((prev) =>!prev)}}
+            aria-haspopup='menu'
+            aria-expanded={dropdown ? 'true' : 'false'}
+            onClick={() => {
+              setDropdown((prev) => !prev);
+            }}
           >
             <span>
-              {item.icon && <FontAwesomeIcon icon={item.icon} size="1x" />}
-              {' '}
-              {item.title}
-              {' '} 
+              {item.icon && (
+                <FontAwesomeIcon
+                  icon={item.icon}
+                  size='1x'
+                />
+              )}{' '}
+              {item.title}{' '}
             </span>
-            <FontAwesomeIcon icon={`angles-${arrowDirection}`} size="1x" /> 
+            <FontAwesomeIcon
+              icon={`angles-${arrowDirection}`}
+              size='1x'
+            />
           </NavLink>
           <BurgerDropdown
-          dropdown = {dropdown} 
-          submenu={item.submenu}
-          depthLevel={depthLevel}
-          setResetBurger={setResetBurger}
-          resetBurger={resetBurger}/>
+            dropdown={dropdown}
+            submenu={item.submenu}
+            depthLevel={depthLevel}
+            setResetBurger={setResetBurger}
+            resetBurger={resetBurger}
+          />
         </>
       ) : (
-        <NavLink className={'burger-link'}
-        onClick={(e)=>{
-          setResetBurger({})
-        }}
-        to={item.url}
+        <NavLink
+          className={'burger-link'}
+          onClick={(e) => {
+            setResetBurger({});
+          }}
+          to={item.url}
         >
           <span>
-            {item.icon && <FontAwesomeIcon icon={item.icon} size="1x" />}
-            {' '}
+            {item.icon && (
+              <FontAwesomeIcon
+                icon={item.icon}
+                size='1x'
+              />
+            )}{' '}
             {item.title}
           </span>
         </NavLink>
       )}
     </li>
+    </AuthorizeItem>
   );
 };
 

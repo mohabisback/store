@@ -1,4 +1,4 @@
-import { Request } from '../../../interfaces/general';
+import { Request } from '../../../types/general';
 import { Response } from 'express';
 
 const AddLogoutTokens = async (req: Request, res: Response) => {

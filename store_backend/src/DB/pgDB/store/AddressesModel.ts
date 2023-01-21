@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
-import { Ref } from '../../../interfaces/general';
-import { Address } from '../../../interfaces/users';
+import { TyRef } from '../../../types/general';
+import { TyAddress } from '../../../types/users';
 import { dbName, dbResetOrUp } from '../../dbState';
 import CommonModel from '../CommonModel';
 import { connRelease } from '../pgClient';
@@ -14,20 +14,27 @@ export default class AddressesModel {
   }
 
   //checks Email already exists then adds address, returns id
-  static async AddAddress(address: Address): Promise<number> {
+  static async AddAddress(address: TyAddress): Promise<number> {
     return await CommonModel.AddOne(table, address);
   }
 
-  static async getAllAddresses(search?: string, findProps: Address = {}, projProps:Address = {}, limit?: number, page?: number, sort?: {}): Promise<Address[]> {
-    return (await CommonModel.getAll(table, search, findProps, projProps, limit, page, sort)) as Address[];
+  static async searchAddresses(
+    search?: string,
+    findProps: TyAddress = {},
+    projProps: TyAddress = {},
+    limit?: number,
+    page?: number,
+    sort?: {},
+  ): Promise<TyAddress[]> {
+    return (await CommonModel.search(table, search, findProps, projProps, limit, page, sort)) as TyAddress[];
   }
 
-  static async getSomeAddresses(props: Address, limit?: number, page?: number, sort?: {}): Promise<Address[]> {
-    return (await CommonModel.getSome(table, props)) as Address[];
+  static async getManyAddresses(props: TyAddress, limit?: number, page?: number, sort?: {}): Promise<TyAddress[]> {
+    return (await CommonModel.getMany(table, props)) as TyAddress[];
   }
 
-  static async getAddress(findProps: Address, projProps?: Address, refs?:Ref[]): Promise<Address | null> {
-    return (await CommonModel.getOne(table, findProps, projProps, refs)) as Address | null;
+  static async getAddress(findProps: TyAddress, projProps?: TyAddress, refs?: TyRef[]): Promise<TyAddress | null> {
+    return (await CommonModel.getOne(table, findProps, projProps, refs)) as TyAddress | null;
   }
 
   static async updateAddress(findProps: {}, updateProps: {}): Promise<boolean> {

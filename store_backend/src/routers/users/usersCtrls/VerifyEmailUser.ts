@@ -1,6 +1,6 @@
 import { Status, ErrAPI } from '../../../ErrAPI';
-import { Request, Response, NextFunction } from '../../../interfaces/general';
-import { User } from '../../../interfaces/users';
+import { Request, Response, NextFunction } from '../../../types/general';
+import { TyUser } from '../../../types/users';
 import { getUserEmailOrId } from './_functions';
 
 //import UsersModel from '../../../DB/mongoDB/store/UsersModel' //mongoDB model
@@ -10,7 +10,7 @@ const UsersModel = require(`../../../DB/${
 }/store/UsersModel`).default;
 
 const VerifyEmailUser = async (req: Request, res: Response, next: NextFunction) => {
-  //get credentials from body.user 
+  //get credentials from body.user
   let verifyToken: string | undefined = req.body.user.verifyToken;
   if (!verifyToken) {
     throw new ErrAPI(Status.BAD_REQUEST, 'Missing Credentials.');

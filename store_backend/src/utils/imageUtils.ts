@@ -14,7 +14,11 @@ export const fileNameDimensions = (name: string, width: string, height: string):
 };
 
 //Check if the image exists, even with different extension
-export const checkImageInServer = async (name: string, width: number = 0, height: number = 0): Promise<string | null> => {
+export const checkImageInServer = async (
+  name: string,
+  width: number = 0,
+  height: number = 0,
+): Promise<string | null> => {
   let filePath: string;
   if (width && height) {
     //add width and height to name
@@ -42,10 +46,10 @@ export const checkImageInServer = async (name: string, width: number = 0, height
   }
   return null;
 };
-export const cloneThumb = async (pipeline: sharp.Sharp, fileName:string)=>{
+export const cloneThumb = async (pipeline: sharp.Sharp, fileName: string) => {
   const thumbPath: string = path.resolve(path.join(imagesDir, thumbsDir, fileName));
-  pipeline.clone().toFile(thumbPath)
-}
+  pipeline.clone().toFile(thumbPath);
+};
 export const createThumb = async (filePath: string, width: number, height: number): Promise<string | null> => {
   const name = path.parse(filePath).name;
   const newName = fileNameDimensions(name, String(width), String(height));

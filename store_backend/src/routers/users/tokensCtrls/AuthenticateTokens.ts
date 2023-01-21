@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken';
 import AddLogoutTokens from './AddLogoutTokens';
 import CreateTokens from './CreateTokens';
-import { Request } from '../../../interfaces/general';
+import { Request } from '../../../types/general';
 import { Response, NextFunction } from 'express';
-import { JwtPayload, TokenSecret, User } from '../../../interfaces/users';
-import { Role } from '../../../interfaces/users';
+import { JwtPayload, TyTokenSecret, TyUser } from '../../../types/users';
+import { EnRole } from '../../../types/users';
 
 //import TokensModel from '../../../DB/mongoDB/store/TokensModel' //mongoDB model
 //import TokensModel from '../../../DB/pgDB/store/TokensModel' //pgDB model
@@ -17,19 +17,19 @@ const TokensModel = require(`../../../DB/${
 const AuthenticateTokens = async (req: Request, res: Response, next: NextFunction) => {
   //Authentication for testing & development purposes
   if (process.env.ENV?.includes('owner')) {
-    req.user = { id: 1, email: 'mohab1@email.com', role: Role.owner };
+    req.user = { id: 1, email: 'mohab1@email.com', role: EnRole.owner };
     return next();
   } else if (process.env.ENV?.includes('admin')) {
-    req.user = { id: 2, email: 'mohab2@email.com', role: Role.admin };
+    req.user = { id: 2, email: 'mohab2@email.com', role: EnRole.admin };
     return next();
   } else if (process.env.ENV?.includes('editor')) {
-    req.user = { id: 3, email: 'mohab3@email.com', role: Role.editor };
+    req.user = { id: 3, email: 'mohab3@email.com', role: EnRole.editor };
     return next();
   } else if (process.env.ENV?.includes('service')) {
-    req.user = { id: 4, email: 'mohab4@email.com', role: Role.service };
+    req.user = { id: 4, email: 'mohab4@email.com', role: EnRole.service };
     return next();
   } else if (process.env.ENV?.includes('user')) {
-    req.user = { id: 5, email: 'mohab5@email.com', role: Role.user };
+    req.user = { id: 5, email: 'mohab5@email.com', role: EnRole.user };
     return next();
   }
   //get signed cookies from request
@@ -56,7 +56,7 @@ const AuthenticateTokens = async (req: Request, res: Response, next: NextFunctio
       // payload = { user, secret }
       const payload = jwt.verify(refreshToken, process.env.JWT_SECRET as string) as JwtPayload;
       //search for this refresh token in the database
-      let tokenSecret: TokenSecret | null = null;
+      let tokenSecret: TyTokenSecret | null = null;
       if (payload.user && payload.user.email && payload.secret) {
         tokenSecret = await TokensModel.getTokenSecret({ email: payload.user.email, secret: payload.secret });
       }

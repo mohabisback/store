@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from '../../../interfaces/general';
+import { Request, Response, NextFunction } from '../../../types/general';
 import { ErrAPI, Status } from '../../../ErrAPI';
-import { Order } from '../../../interfaces/store';
+import { TyOrder } from '../../../types/store';
 
 //import OrdersModel from '../../../DB/mongoDB/store/OrdersModel' //mongoDB model
 //import OrdersModel from '../../../DB/pgDB/store/OrdersModel' //pgDB model
@@ -12,13 +12,13 @@ const GetOrder = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const idNum = parseInt(id);
   //get order from database
-  let order: Order | null;
+  let order: TyOrder | null;
   if (Number.isInteger(idNum)) {
     order = await OrdersModel.getOrder({ id: idNum });
   } else {
     throw new ErrAPI(Status.UNAUTHORIZED, 'Missing info.');
   }
 
-  res.status(Status.OK).send(order);
+  res.status(Status.OK).send({order, message: 'order is sent.'});
 };
 export default GetOrder;

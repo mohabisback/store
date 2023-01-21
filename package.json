@@ -6,8 +6,13 @@
   "keywords": [],
   "author": "MohabIsBack",
   "license": "ISC",
-  "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^8.32.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.3"
+  },
   "scripts": {
     "frontend:install": "cd store_frontend && npm install",
     "backend:install": "cd store_backend && npm install",
@@ -19,6 +24,6 @@
     "backend:deploy": "cd store_backend && npm run deploy:dev-editor-pg",
     "backend:env": "cd store_backend && npm run env:dev-editor-pg",
     "lint": "eslint -c ./config/.eslintrc.js --ignore-path ./config/.eslintignore . --ext .ts,.tsx,.js,.jsx",
-    "prettier": "prettier --config ./config/.prettierrc.js --ignore-path ./config/.prettierignore . --write" 
+    "prettier": "prettier --config ./config/.prettierrc.js --ignore-path ./config/.prettierignore . --write"
   }
 }

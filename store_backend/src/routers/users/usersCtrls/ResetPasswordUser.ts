@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import CreateTokens from '../tokensCtrls/CreateTokens';
 import { ErrAPI, Status } from '../../../ErrAPI';
-import { NextFunction, Request, Response } from '../../../interfaces/general';
-import { getResUser, User } from '../../../interfaces/users';
+import { NextFunction, Request, Response } from '../../../types/general';
+import { getSignedUser, TyUser } from '../../../types/users';
 import { getUserEmailOrId } from './_functions';
 
 //import UsersModel from '../../../DB/mongoDB/store/UsersModel' //mongoDB model
@@ -13,8 +13,8 @@ const UsersModel = require(`../../../DB/${
 
 const ResetPasswordUser = async (req: Request, res: Response, next: NextFunction) => {
   //get credentials from body.user
-  const passToken: string|undefined = req.query.passToken as string|undefined;
-  const password: string|undefined = req.body.user.password;
+  const passToken: string | undefined = req.query.passToken as string | undefined;
+  const password: string | undefined = req.body.user.password;
   if (!passToken || !password) {
     throw new ErrAPI(Status.BAD_REQUEST, 'Missing Credentials.');
   }
@@ -46,9 +46,9 @@ const ResetPasswordUser = async (req: Request, res: Response, next: NextFunction
       //create token anyway, he had the right email token
       await CreateTokens(req, res, user);
       if (result) {
-        res.status(Status.CREATED).send({ user: getResUser(user), message: 'Successfully Updated Password.' });
+        res.status(Status.CREATED).send({ SignedUser: getSignedUser(user), message: 'Successfully Updated Password.' });
       } else {
-        res.status(Status.BAD_GATEWAY).send({ user: getResUser(user), message: 'Failed password, but signed in.' });
+        res.status(Status.BAD_GATEWAY).send({ SignedUser: getSignedUser(user), message: 'Failed password, but signed in.' });
       }
     }
   }

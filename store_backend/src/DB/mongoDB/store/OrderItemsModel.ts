@@ -1,10 +1,10 @@
 import { Collection, MongoClient } from 'mongodb';
 import { Status, ErrAPI } from '../../../ErrAPI';
-import { OrderItem } from '../../../interfaces/store';
+import { TyOrderItem } from '../../../types/store';
 import CommonModel from '../CommonModel';
 import { noConnMess } from '../../../ErrAPI';
 import { dbName, dbResetOrUp } from '../../dbState';
-import { Ref } from '../../../interfaces/general';
+import { TyRef } from '../../../types/general';
 
 const collName = 'orderItems';
 let coll: Collection;
@@ -22,49 +22,60 @@ export default class OrderItemsModel {
   }
 
   //Get Count of Documents with specific props
-  static async getOrderItemsCount(props: OrderItem): Promise<number> {
+  static async getOrderItemsCount(props: TyOrderItem): Promise<number> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
     return await CommonModel.getCount(coll, props);
   }
 
-  static async AddOrderItems(orderItems: OrderItem[]): Promise<number[]> {
+  static async AddOrderItems(orderItems: TyOrderItem[]): Promise<number[]> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
     return await CommonModel.AddMany(coll, orderItems);
   }
 
-  static async getAllOrderItems(search?: string, findProps: OrderItem = {}, projProps: OrderItem = {}, limit?: number, page?: number, sort?: {}): Promise<OrderItem[]> {
+  static async searchOrderItems(
+    search?: string,
+    findProps: TyOrderItem = {},
+    projProps: TyOrderItem = {},
+    limit?: number,
+    page?: number,
+    sort?: {},
+  ): Promise<TyOrderItem[]> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getAll(coll, search, findProps, projProps, limit, page, sort)) as OrderItem[];
+    return (await CommonModel.search(coll, search, findProps, projProps, limit, page, sort)) as TyOrderItem[];
   }
 
-  static async getSomeOrderItems(props: OrderItem, limit?: number, page?: number, sort?: {}): Promise<OrderItem[]> {
+  static async getManyOrderItems(props: TyOrderItem, limit?: number, page?: number, sort?: {}): Promise<TyOrderItem[]> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getSome(coll, props)) as OrderItem[];
+    return (await CommonModel.getMany(coll, props)) as TyOrderItem[];
   }
 
-  static async getOrderItem(findProps: OrderItem, projProps?: OrderItem, refs?:Ref[]): Promise<OrderItem | null> {
+  static async getOrderItem(
+    findProps: TyOrderItem,
+    projProps?: TyOrderItem,
+    refs?: TyRef[],
+  ): Promise<TyOrderItem | null> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getOne(coll, findProps, projProps, refs)) as OrderItem | null;
+    return (await CommonModel.getOne(coll, findProps, projProps, refs)) as TyOrderItem | null;
   }
 
-  static async updateOrderItem(findProps: OrderItem, updateProps: OrderItem): Promise<boolean> {
+  static async updateOrderItem(findProps: TyOrderItem, updateProps: TyOrderItem): Promise<boolean> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
     return await CommonModel.updateOne(coll, findProps, updateProps);
   }
 
-  static async updateSomeOrderItems(findProps: OrderItem, updateProps: OrderItem): Promise<number> {
+  static async updateSomeOrderItems(findProps: TyOrderItem, updateProps: TyOrderItem): Promise<number> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }

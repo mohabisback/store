@@ -1,13 +1,18 @@
 import express from 'express';
 import roleAuth from '../authorize';
-import { Access } from '../../interfaces/users';
+import { EnAccess } from '../../types/users';
+
+import GetCategories from './categoriesCtrls/GetCategories';
+import GetCategory from './categoriesCtrls/GetCategory';
+import AddCategory from './categoriesCtrls/AddCategory';
+import UpdateCategory from './categoriesCtrls/UpdateCategory';
 
 import GetProducts from './productsCtrls/GetProducts';
 import GetProduct from './productsCtrls/GetProduct';
 import AddProduct from './productsCtrls/AddProduct';
 import UpdateProduct from './productsCtrls/UpdateProduct';
 
-import CartItem from './cartItemsCtrls/CartItem'
+import CartItem from './cartItemsCtrls/CartItem';
 
 import GetOrders from './ordersCtrls/GetOrders';
 import GetOrder from './ordersCtrls/GetOrder';
@@ -24,6 +29,7 @@ import AddPack from './packsCtrls/AddPack';
 import UpdatePack from './packsCtrls/UpdatePack';
 
 import { ErrAsync } from '../../ErrAPI';
+import DeleteCategory from './categoriesCtrls/DeleteCategory';
 
 const router = express.Router({ mergeParams: true });
 
@@ -46,26 +52,36 @@ const router = express.Router({ mergeParams: true });
 //products
 router.route('/products/index').get(ErrAsync(GetProducts));
 router.route('/products/:titleOrId').get(ErrAsync(GetProduct));
-router.route('/products/add').post(roleAuth(Access.editor), ErrAsync(AddProduct));
-router.route('/products/:titleOrId').post(roleAuth(Access.editor), ErrAsync(UpdateProduct));
+router.route('/products/add').post(roleAuth(EnAccess.editor), ErrAsync(AddProduct));
+router.route('/products/:titleOrId').post(roleAuth(EnAccess.editor), ErrAsync(UpdateProduct));
+
+//categories
+router.route('/categories/index').get(ErrAsync(GetCategories));
+router.route('/categories/:titleOrId').get(ErrAsync(GetCategory));
+router.route('/categories/add').post(roleAuth(EnAccess.editor), ErrAsync(AddCategory));
+router.route('/categories/:titleOrId').post(roleAuth(EnAccess.editor), ErrAsync(UpdateCategory));
+router.route('/categories/:title').delete(roleAuth(EnAccess.editor), ErrAsync(DeleteCategory));
+
 
 //cart items
-router.route('/cartItems/:product_id/:quantity').get(roleAuth(Access.user, 'Restricted.'), ErrAsync(CartItem));
+router.route('/cartItems/:product_id/:quantity').get(roleAuth(EnAccess.user, 'Restricted.'), ErrAsync(CartItem));
 
 //orders
-router.route('/orders/index').get(roleAuth(Access.user, 'Users only, please sign in.'), ErrAsync(GetOrders));
-router.route('/orders/add').post(roleAuth(Access.user, 'Users only, please sign in.'), ErrAsync(AddOrder));
-router.route('/orders/:id').get(roleAuth(Access.user, 'Users only, please sign in.'), ErrAsync(GetOrder));
+router.route('/orders/index').get(roleAuth(EnAccess.user, 'Users only, please sign in.'), ErrAsync(GetOrders));
+router.route('/orders/add').post(roleAuth(EnAccess.user, 'Users only, please sign in.'), ErrAsync(AddOrder));
+router.route('/orders/:id').get(roleAuth(EnAccess.user, 'Users only, please sign in.'), ErrAsync(GetOrder));
 
 //order items
-router.route('/order-items/index').get(roleAuth(Access.user, 'Users only, please sign in.'), ErrAsync(GetOrderItems));
-router.route('/order-items/:id').post(roleAuth(Access.user, 'Users only, please sign in.'), ErrAsync(UpdateOrderItem));
-router.route('/order-items/:id').get(roleAuth(Access.user, 'Users only, please sign in.'), ErrAsync(GetOrderItem));
+router.route('/order-items/index').get(roleAuth(EnAccess.user, 'Users only, please sign in.'), ErrAsync(GetOrderItems));
+router
+  .route('/order-items/:id')
+  .post(roleAuth(EnAccess.user, 'Users only, please sign in.'), ErrAsync(UpdateOrderItem));
+router.route('/order-items/:id').get(roleAuth(EnAccess.user, 'Users only, please sign in.'), ErrAsync(GetOrderItem));
 
 //packages
-router.route('/packs/index').get(roleAuth(Access.user, 'Users only, please sign in.'), ErrAsync(GetPacks));
-router.route('/packs/add').post(roleAuth(Access.editor, 'Restricted.'), ErrAsync(AddPack));
-router.route('/packs/:id').post(roleAuth(Access.editor, 'Restricted.'), ErrAsync(UpdatePack));
-router.route('/packs/:id').get(roleAuth(Access.user, 'Users only, please sign in.'), ErrAsync(GetPack));
+router.route('/packs/index').get(roleAuth(EnAccess.user, 'Users only, please sign in.'), ErrAsync(GetPacks));
+router.route('/packs/add').post(roleAuth(EnAccess.editor, 'Restricted.'), ErrAsync(AddPack));
+router.route('/packs/:id').post(roleAuth(EnAccess.editor, 'Restricted.'), ErrAsync(UpdatePack));
+router.route('/packs/:id').get(roleAuth(EnAccess.user, 'Users only, please sign in.'), ErrAsync(GetPack));
 
 export default router;

@@ -1,6 +1,6 @@
 import { ErrAPI, Status } from '../../../ErrAPI';
-import { Request, Response, NextFunction } from '../../../interfaces/general';
-import { OrderItem, OrderItemTemp } from '../../../interfaces/store';
+import { Request, Response, NextFunction } from '../../../types/general';
+import { TyOrderItem, TmOrderItem } from '../../../types/store';
 import { cleanObject } from '../../_functions';
 
 //import OrderItemsModel from '../../../DB/mongoDB/store/OrderItemsModel' //mongoDB model
@@ -13,7 +13,7 @@ const UpdateOrderItem = async (req: Request, res: Response, next: NextFunction) 
   //extract id, email
   const { id } = req.params;
   const idNum = parseInt(id);
-  let orderItem: OrderItem | null;
+  let orderItem: TyOrderItem | null;
   if (id && Number.isInteger(idNum)) {
     orderItem = await OrderItemsModel.getOrderItem({ id: idNum });
   } else {
@@ -23,15 +23,15 @@ const UpdateOrderItem = async (req: Request, res: Response, next: NextFunction) 
     throw new ErrAPI(Status.BAD_REQUEST, 'Order item not found.');
   }
 
-  let props: OrderItem|undefined = req.body.orderItem;  
+  let props: TyOrderItem | undefined = req.body.orderItem;
   if (!props) {
     throw new ErrAPI(Status.BAD_REQUEST, 'Missing info.');
   }
-  const unEditables: (keyof OrderItem)[] = ['id', 'order_id', 'product_id', 'user_id'];
+  const unEditables: (keyof TyOrderItem)[] = ['id', 'order_id', 'product_id', 'user_id'];
   if (orderItem.pack_id) {
     unEditables.push('pack_id');
   }
-  props = cleanObject(props, OrderItemTemp, unEditables);
+  props = cleanObject(props, TmOrderItem, unEditables);
   if (!props) {
     throw new ErrAPI(Status.BAD_REQUEST, 'Missing info.');
   }

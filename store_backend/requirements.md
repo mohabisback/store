@@ -1,24 +1,35 @@
 # Files EndPoints, for products images & catalogues
+
 front end should upload files first, and if ok, add then the product with the urls or image names
+
 ## /files/:image
+
 #### GET
+
 #### Required data
+
 req.params.imageNameWithExtensionIfPossible
+
 #### optional data
+
 req.query.width
 req.query.height
 
 ## /files/uploads/server
+
 #### POST
+
 #### Required data
+
 req.body.file
 
 ## /files/uploads/mongo
+
 #### POST
+
 #### Required data
+
 req.body.file
-
-
 
 # Users EndPoints
 
@@ -301,7 +312,7 @@ stock: number, //number of pieces available
 viewsCount: number, //number of views
 ordersCount: number, //number of orders
 used: false, //is it new or used
-category: Category.clothes,
+category: EnCategory.clothes,
 size: Size.L,
 color: Color.blue,
 maxItems: number, //max number of items to be bought in one order
@@ -339,7 +350,7 @@ price: number, //buying price of one item
 
 //programmatically added
 id: number,
-status: OrderStatus.approved,
+status: EnOrderStatus.approved,
 user_id: number,
 order_id: number,
 deliveryDate: date,
@@ -351,11 +362,11 @@ serialNos: number[], //serial numbers for returning
 id: number,
 order_id: number,
 items_ids: number[],
-status: OrderStatus.none, //when updated, items.status must update
+status: EnOrderStatus.none, //when updated, items.status must update
 weight: number,
 ship_code: string,
 
-## enum OrderStatus
+## enum EnOrderStatus
 
 ordered = 'ordered', // by client
 cancelled = 'cancelled', // by client or seller

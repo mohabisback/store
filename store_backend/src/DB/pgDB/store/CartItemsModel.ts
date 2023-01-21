@@ -1,6 +1,6 @@
 import { ErrAPI, Status } from '../../../ErrAPI';
-import { Ref } from '../../../interfaces/general';
-import { CartItem } from '../../../interfaces/store';
+import { TyRef } from '../../../types/general';
+import { TyCartItem } from '../../../types/store';
 import { dbResetOrUp } from '../../dbState';
 import CommonModel from '../CommonModel';
 import { connRelease } from '../pgClient';
@@ -9,36 +9,49 @@ const table = 'cartItems';
 
 export default class CartItemsModel {
   //Get Count of Documents with specific props
-  static async getCartItemsCount(props: CartItem): Promise<number> {
+  static async getCartItemsCount(props: TyCartItem): Promise<number> {
     return await CommonModel.getCount(table, props);
   }
 
-  static async AddCartItems(cartItems: CartItem[]): Promise<number[]> {
+  static async AddCartItems(cartItems: TyCartItem[]): Promise<number[]> {
     return await CommonModel.AddMany(table, cartItems);
   }
 
-  static async getAllCartItems(search?: string, findProps: CartItem = {}, projProps: CartItem = {}, limit?: number, page?: number, sort?: {}): Promise<CartItem[]> {
-    return (await CommonModel.getAll(table, search, findProps, projProps, limit, page, sort)) as CartItem[];
+  static async searchCartItems(
+    search?: string,
+    findProps: TyCartItem = {},
+    projProps: TyCartItem = {},
+    limit?: number,
+    page?: number,
+    sort?: {},
+  ): Promise<TyCartItem[]> {
+    return (await CommonModel.search(table, search, findProps, projProps, limit, page, sort)) as TyCartItem[];
   }
 
-  static async getSomeCartItems(findProps: CartItem, projProps: CartItem={}, limit?: number, page?: number, sort?: {}): Promise<CartItem[]> {
-    return (await CommonModel.getSome(table, findProps, projProps, limit, page, sort)) as CartItem[];
+  static async getManyCartItems(
+    findProps: TyCartItem,
+    projProps: TyCartItem = {},
+    limit?: number,
+    page?: number,
+    sort?: {},
+  ): Promise<TyCartItem[]> {
+    return (await CommonModel.getMany(table, findProps, projProps, limit, page, sort)) as TyCartItem[];
   }
 
-  static async getCartItem(findProps: CartItem, projProps?: CartItem, refs?:Ref[]): Promise<CartItem | null> {
-    return (await CommonModel.getOne(table, findProps, projProps, refs)) as CartItem | null;
+  static async getCartItem(findProps: TyCartItem, projProps?: TyCartItem, refs?: TyRef[]): Promise<TyCartItem | null> {
+    return (await CommonModel.getOne(table, findProps, projProps, refs)) as TyCartItem | null;
   }
 
-  static async updateCartItem(findProps: CartItem, updateProps: CartItem): Promise<boolean> {
+  static async updateCartItem(findProps: TyCartItem, updateProps: TyCartItem): Promise<boolean> {
     return await CommonModel.updateOne(table, findProps, updateProps);
   }
 
-  static async updateSomeCartItems(findProps: CartItem, updateProps: CartItem): Promise<number> {
+  static async updateSomeCartItems(findProps: TyCartItem, updateProps: TyCartItem): Promise<number> {
     return await CommonModel.updateAll(table, findProps, updateProps);
   }
 
-  static async cartItem(cartItem:CartItem):Promise<CartItem[]>{
-    const querySql =`
+  static async cartItem(cartItem: TyCartItem): Promise<TyCartItem[]> {
+    const querySql = `
   WITH
   --update cartItem if it exists
   upd AS ( UPDATE "cartItems" SET "quantity" = $3, "date" = $6 WHERE "user_id" = $1 and "product_id"= $2 RETURNING *)
@@ -53,18 +66,21 @@ export default class CartItemsModel {
   UNION
   SELECT * from ins WHERE "quantity" > 0
   UNION
-  SELECT * from "cartItems" WHERE "user_id" = $1 and product_id <> $2 and "quantity" > 0 ORDER BY "date" ASC`
+  SELECT * from "cartItems" WHERE "user_id" = $1 and product_id <> $2 and "quantity" > 0 ORDER BY "date" ASC`;
 
-  const queryValues = [cartItem.user_id, cartItem.product_id,
-  cartItem.quantity, cartItem.price, cartItem.discount, "'" + (new Date()).toISOString().slice(0, 19).replace('T', ' ') + "'"]  
-  console.log('came here in cartsItems')
-  const results = await connRelease(querySql, queryValues, `Can't find ${table} rows.`);
-  console.log('cartItem results: ', results.rows)
-  if (results) {
-    return results.rows;
-  } else {
-    throw new ErrAPI(Status.BAD_GATEWAY, `Can't find ${table} rows.`);
+    const queryValues = [
+      cartItem.user_id,
+      cartItem.product_id,
+      cartItem.quantity,
+      cartItem.price,
+      cartItem.discount,
+      "'" + new Date().toISOString().slice(0, 19).replace('T', ' ') + "'",
+    ];
+    const results = await connRelease(querySql, queryValues, `Can't find ${table} rows.`);
+    if (results) {
+      return results.rows;
+    } else {
+      throw new ErrAPI(Status.BAD_GATEWAY, `Can't find ${table} rows.`);
+    }
   }
-
-}
 }

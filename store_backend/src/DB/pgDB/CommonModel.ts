@@ -1,12 +1,12 @@
 import { Status, ErrAPI } from '../../ErrAPI';
-import { Facets, Ref } from '../../interfaces/general';
+import { TyFacets, TyRef } from '../../types/general';
 import { connRelease } from './pgClient';
 import { sqlCount, sqlDelete, sqlInsert, sqlSelect, sqlSelectOne, sqlSelectSome, sqlUpdate } from './sqlFactory';
 
 export default class CommonModel {
   //Get Count of Documents with specific props
   static async getCount(table: string, props: {}): Promise<number> {
-    const query = sqlCount(table, props)
+    const query = sqlCount(table, props);
     const result = await connRelease(query.sql, query.values, `Can't count ${table} rows`);
     return parseInt(result.rows[0].count);
   }
@@ -20,7 +20,7 @@ export default class CommonModel {
         throw new ErrAPI(Status.CONFLICT, `Duplicate ${table} row.`);
       }
     }
-    const query = sqlInsert(table, [doc])
+    const query = sqlInsert(table, [doc]);
     const result = await connRelease(query.sql, query.values, `can't insert ${table} row`);
     if (result.rowCount) {
       return result.rows[0].id;
@@ -31,7 +31,7 @@ export default class CommonModel {
 
   //adds documents, returns ids
   static async AddMany(table: string, props: any[]): Promise<number[]> {
-    const query = sqlInsert(table, props)
+    const query = sqlInsert(table, props);
     const result = await connRelease(query.sql, query.values, `can't insert ${table} rows`);
     if (result.rows) {
       return result.rows.map((row) => row.id);
@@ -41,7 +41,7 @@ export default class CommonModel {
   }
 
   static async updateOne(table: string, findProps: {}, updateProps: {}): Promise<boolean> {
-    const query = sqlUpdate(table, findProps, updateProps, 1)
+    const query = sqlUpdate(table, findProps, updateProps, 1);
     const result = await connRelease(query.sql, query.values, `Can't update ${table} row.`);
     if (result.rowCount) {
       return true;
@@ -51,7 +51,7 @@ export default class CommonModel {
   }
 
   static async updateAll(table: string, findProps: {}, updateProps: {}): Promise<number> {
-    const query = sqlUpdate(table, findProps, updateProps)
+    const query = sqlUpdate(table, findProps, updateProps);
     const result = await connRelease(query.sql, query.values, `Can't update ${table} row.`);
     if (result.rowCount) {
       return 1;
@@ -61,7 +61,7 @@ export default class CommonModel {
   }
 
   static async deleteOne(table: string, props: {}): Promise<boolean> {
-    const query = sqlDelete(table, props, 1)
+    const query = sqlDelete(table, props, 1);
     const result = await connRelease(query.sql, query.values, `Can't delete ${table} row.`);
     if (result.rowCount) {
       return true;
@@ -70,8 +70,8 @@ export default class CommonModel {
     }
   }
 
-  static async getOne(table: string, findProps: {}, projProps?:{}, refs?:Ref[]): Promise<Document | null> {
-    const query = sqlSelectOne(table, findProps, projProps, refs)
+  static async getOne(table: string, findProps: {}, projProps?: {}, refs?: TyRef[]): Promise<Document | null> {
+    const query = sqlSelectOne(table, findProps, projProps, refs);
     const result = await connRelease(query.sql, query.values, `Can't find ${table} row.`);
     if (result.rows) {
       return result.rows[0];
@@ -79,13 +79,20 @@ export default class CommonModel {
       return null;
     }
   }
-  
-  static async getSome(table: string, findProps = {}, projProps = {}, limit?: number, page?: number, sort?: {},): Promise<Document[]> {
+
+  static async getMany(
+    table: string,
+    findProps = {},
+    projProps = {},
+    limit?: number,
+    page?: number,
+    sort?: {},
+  ): Promise<Document[]> {
     limit = limit ? limit : 30;
     page = page ? page - 1 : 0;
     sort = sort ? sort : { id: -1 };
-    const skip = limit * page
-    const query = sqlSelectSome(table, findProps, projProps, limit, page, skip)
+    const skip = limit * page;
+    const query = sqlSelectSome(table, findProps, projProps, limit, page, skip);
     const results = await connRelease(query.sql, query.values, `Can't find ${table} rows.`);
     if (results) {
       return results.rows;
@@ -98,12 +105,21 @@ export default class CommonModel {
   // 1 based pages, default limit = 100
   // sorting example {{email: 1}, {title: -1}} // 1=ascending, -1=descending
   //default is newest docs first
-  static async getAll(table: string,  search = '', findProps = {}, projProps = {}, limit?: number, page?: number, sort?: {}, facets?:Facets): Promise<Document[]> {
+  static async search(
+    table: string,
+    search = '',
+    findProps = {},
+    projProps = {},
+    limit?: number,
+    page?: number,
+    sort?: {},
+    facets?: TyFacets,
+  ): Promise<Document[]> {
     limit = limit ? limit : 30;
     page = page ? page - 1 : 0;
     sort = sort ? sort : { id: -1 };
-    const skip = limit * page
-    const query = sqlSelect(table, search, findProps, projProps, limit, skip, sort, facets)
+    const skip = limit * page;
+    const query = sqlSelect(table, search, findProps, projProps, limit, skip, sort, facets);
     const results = await connRelease(query.sql, query.values, `Can't find ${table} rows.`);
     if (results) {
       return results.rows[0];

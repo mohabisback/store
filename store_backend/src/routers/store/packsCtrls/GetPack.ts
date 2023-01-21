@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from '../../../interfaces/general';
+import { Request, Response, NextFunction } from '../../../types/general';
 import { ErrAPI, Status } from '../../../ErrAPI';
-import { Pack } from '../../../interfaces/store';
+import { TyPack } from '../../../types/store';
 
 //import PacksModel from '../../../DB/mongoDB/store/PacksModel' //mongoDB model
 //import PacksModel from '../../../DB/pgDB/store/PacksModel' //pgDB model
@@ -12,13 +12,13 @@ const GetPack = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const idNum = parseInt(id);
   //get pack from database
-  let pack: Pack | null;
+  let pack: TyPack | null;
   if (Number.isInteger(idNum)) {
     pack = await PacksModel.getPack({ id: idNum });
   } else {
     throw new ErrAPI(Status.UNAUTHORIZED, 'Missing info.');
   }
 
-  res.status(Status.OK).send(pack);
+  res.status(Status.OK).send({pack, message: 'pack is sent'});
 };
 export default GetPack;

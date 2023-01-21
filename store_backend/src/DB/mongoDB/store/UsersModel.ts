@@ -1,10 +1,10 @@
 import { Collection, MongoClient, UpdateResult } from 'mongodb';
 import { Status, ErrAPI } from '../../../ErrAPI';
-import { User } from '../../../interfaces/users';
+import { TyUser } from '../../../types/users';
 import CommonModel from '../CommonModel';
 import { noConnMess } from '../../../ErrAPI';
 import { dbName, dbResetOrUp } from '../../dbState';
-import { Ref } from '../../../interfaces/general';
+import { TyRef } from '../../../types/general';
 
 const collName = 'users';
 let coll: Collection;
@@ -22,7 +22,7 @@ export default class UsersModel {
   }
 
   //Get Count of Documents with specific props
-  static async getUsersCount(props: User): Promise<number> {
+  static async getUsersCount(props: TyUser): Promise<number> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
@@ -30,35 +30,42 @@ export default class UsersModel {
   }
 
   //checks Email already exists then adds user, returns id
-  static async AddUser(user: User): Promise<number> {
+  static async AddUser(user: TyUser): Promise<number> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
     return await CommonModel.AddOne(coll, user, { email: user.email });
   }
 
-  static async getAllUsers(search?: string, findProps: User = {}, projProps: User = {}, limit?: number, page?: number, sort?: {}): Promise<User[]> {
+  static async searchUsers(
+    search?: string,
+    findProps: TyUser = {},
+    projProps: TyUser = {},
+    limit?: number,
+    page?: number,
+    sort?: {},
+  ): Promise<TyUser[]> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getAll(coll, search, findProps, projProps, limit, page, sort)) as User[];
+    return (await CommonModel.search(coll, search, findProps, projProps, limit, page, sort)) as TyUser[];
   }
 
-  static async getSomeUsers(props: User, limit?: number, page?: number, sort?: {}): Promise<User[]> {
+  static async getManyUsers(props: TyUser, limit?: number, page?: number, sort?: {}): Promise<TyUser[]> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getSome(coll, props)) as User[];
+    return (await CommonModel.getMany(coll, props)) as TyUser[];
   }
 
-  static async getUser(findProps: User, projProps?: User, refs?:Ref[]): Promise<User | null> {
+  static async getUser(findProps: TyUser, projProps?: TyUser, refs?: TyRef[]): Promise<TyUser | null> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getOne(coll, findProps, projProps, refs)) as User | null;
+    return (await CommonModel.getOne(coll, findProps, projProps, refs)) as TyUser | null;
   }
 
-  static async updateUser(findProps: User, updateProps: User): Promise<boolean> {
+  static async updateUser(findProps: TyUser, updateProps: TyUser): Promise<boolean> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }

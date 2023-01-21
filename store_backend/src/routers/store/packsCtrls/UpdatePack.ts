@@ -1,6 +1,6 @@
 import { ErrAPI, Status } from '../../../ErrAPI';
-import { Request, Response, NextFunction } from '../../../interfaces/general';
-import { Pack, PackTemp } from '../../../interfaces/store';
+import { Request, Response, NextFunction } from '../../../types/general';
+import { TyPack, TmPack } from '../../../types/store';
 import { cleanObject } from '../../_functions';
 
 //import OrderItemsModel from '../../../DB/mongoDB/store/OrderItemsModel' //mongoDB model
@@ -19,7 +19,7 @@ const UpdatePack = async (req: Request, res: Response, next: NextFunction) => {
   //extract id, email
   const { id } = req.params;
   const idNum = parseInt(id);
-  let pack: Pack | null;
+  let pack: TyPack | null;
   if (id && Number.isInteger(idNum)) {
     pack = await PacksModel.getPack({ id: idNum });
   } else {
@@ -29,12 +29,12 @@ const UpdatePack = async (req: Request, res: Response, next: NextFunction) => {
     throw new ErrAPI(Status.BAD_REQUEST, 'Order item not found.');
   }
 
-  let props:Pack|undefined = req.body.pack;
+  let props: TyPack | undefined = req.body.pack;
   if (!props) {
     throw new ErrAPI(Status.BAD_REQUEST, 'Missing info.');
   }
-  const unEditables: (keyof Pack)[] = ['id', 'order_id'];
-  props = cleanObject(props, PackTemp, unEditables);
+  const unEditables: (keyof TyPack)[] = ['id', 'order_id'];
+  props = cleanObject(props, TmPack, unEditables);
   //@ts-ignore
   if (!props || Object.keys(props).length === 0 || Object.keys(props)[0] == '0') {
     throw new ErrAPI(Status.METHOD_NOT_ALLOWED, 'Cant update this property.');

@@ -1,6 +1,6 @@
 import { ErrAPI, Status } from '../../../ErrAPI';
-import { Request, Response, NextFunction } from '../../../interfaces/general';
-import { Address, AddressTemp } from '../../../interfaces/users';
+import { Request, Response, NextFunction } from '../../../types/general';
+import { TyAddress, TmAddress } from '../../../types/users';
 
 //import AddressesModel from '../../../DB/mongoDB/store/AddressesModel' //mongoDB model
 //import AddressesModel from '../../../DB/pgDB/store/AddressesModel' //pgDB model
@@ -14,7 +14,7 @@ const UpdateAddress = async (req: Request, res: Response, next: NextFunction) =>
   //extract id, email
   const { id } = req.params;
   const idNum = parseInt(id);
-  let address: Address | null;
+  let address: TyAddress | null;
   if (id && Number.isInteger(idNum)) {
     address = await AddressesModel.getAddress({ id: idNum });
   } else {
@@ -25,8 +25,8 @@ const UpdateAddress = async (req: Request, res: Response, next: NextFunction) =>
   }
 
   let props = { ...req.body.address };
-  const unEditables: (keyof Address)[] = ['id', 'user_id'];
-  props = cleanObject(props, AddressTemp, unEditables);
+  const unEditables: (keyof TyAddress)[] = ['id', 'user_id'];
+  props = cleanObject(props, TmAddress, unEditables);
   //@ts-ignore
   if (Object.keys(props).length === 0 || Object.keys(props)[0] == '0') {
     throw new ErrAPI(Status.METHOD_NOT_ALLOWED, 'Cant update this property.');

@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from '../../../interfaces/general';
+import { Request, Response, NextFunction } from '../../../types/general';
 import { Status } from '../../../ErrAPI';
 import { getProductNameOrId } from './_functions';
 
@@ -14,7 +14,7 @@ const GetProduct = async (req: Request, res: Response, next: NextFunction) => {
   const product = await getProductNameOrId(req.params);
 
   //increase viewsCount by one, don't wait for result
-  ProductsModel.incCount({ id: product.id }, { viewsCount: 1 } );
-  res.status(Status.OK).send(product);
+  ProductsModel.incCount({ id: product.id }, { viewsCount: 1 });
+  res.status(Status.OK).send({product, message: 'product is sent.'});
 };
 export default GetProduct;

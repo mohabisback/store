@@ -1,9 +1,11 @@
-import { EmailFormat, NextFunction, Request, Response } from '../../../interfaces/general';
+import { EmailFormat, NextFunction, Request, Response } from '../../../types/general';
 import { Status, ErrAPI } from '../../../ErrAPI';
 
 //import UsersModel from '../../../DB/mongoDB/store/UsersModel' //mongoDB model
 //import UsersModel from '../../../DB/pgDB/store/UsersModel' //mongoDB model
-const UsersModel = require(`../../../DB/${ process.env.ENV?.includes('mongo') ? 'mongoDB' : 'pgDB'}/store/UsersModel`).default;
+const UsersModel = require(`../../../DB/${
+  process.env.ENV?.includes('mongo') ? 'mongoDB' : 'pgDB'
+}/store/UsersModel`).default;
 
 const CheckUser = async (req: Request, res: Response, next: NextFunction) => {
   //extract id, email

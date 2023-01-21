@@ -1,17 +1,17 @@
 import { Collection, MongoClient } from 'mongodb';
 import { Status, ErrAPI } from '../../../ErrAPI';
-import { Product } from '../../../interfaces/store';
+import { TyProduct } from '../../../types/store';
 import CommonModel from '../CommonModel';
 import { noConnMess } from '../../../ErrAPI';
 import { dbName } from '../../dbState';
-import { Facets, Ref } from '../../../interfaces/general';
+import { TyFacets, TyRef } from '../../../types/general';
 
 const collName = 'products';
 let coll: Collection;
 
 export default class ProductsModel {
   static async injectClient(client: MongoClient, state: string = '') {
-    if(!coll){
+    if (!coll) {
       try {
         coll = client.db(dbName).collection(collName);
       } catch (err) {
@@ -20,7 +20,7 @@ export default class ProductsModel {
     }
   }
   //Get Count of Documents with specific props
-  static async getProductsCount(props: Product): Promise<number> {
+  static async getProductsCount(props: TyProduct): Promise<number> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
@@ -28,32 +28,40 @@ export default class ProductsModel {
   }
 
   //checks Email already exists then adds product, returns id
-  static async AddProduct(product: Product): Promise<number> {
+  static async AddProduct(product: TyProduct): Promise<number> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
     return await CommonModel.AddOne(coll, product, { title: product.title });
   }
 
-  static async getAllProducts(search?: string, findProps: Product = {}, projProps: Product = {}, limit?: number, page?: number, sort?: {}, facets?: Facets): Promise<Product[]> {
+  static async searchProducts(
+    search?: string,
+    findProps: TyProduct = {},
+    projProps: TyProduct = {},
+    limit?: number,
+    page?: number,
+    sort?: {},
+    facets?: TyFacets,
+  ): Promise<TyProduct[]> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getAll(coll, search, findProps, projProps, limit, page, sort, facets)) as Product[];
+    return (await CommonModel.search(coll, search, findProps, projProps, limit, page, sort, facets)) as TyProduct[];
   }
 
-  static async getSomeProducts(props: Product, limit?: number, page?: number, sort?: {}): Promise<Product[]> {
+  static async getManyProducts(props: TyProduct, limit?: number, page?: number, sort?: {}): Promise<TyProduct[]> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getSome(coll, props, {grams: 0})) as Product[];
+    return (await CommonModel.getMany(coll, props, { grams: 0 })) as TyProduct[];
   }
 
-  static async getProduct(findProps: Product, projProps?: Product, refs?:Ref[]): Promise<Product | null> {
+  static async getProduct(findProps: TyProduct, projProps?: TyProduct, refs?: TyRef[]): Promise<TyProduct | null> {
     if (!coll) {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
-    return (await CommonModel.getOne(coll, findProps, projProps, refs)) as Product | null;
+    return (await CommonModel.getOne(coll, findProps, projProps, refs)) as TyProduct | null;
   }
 
   static async updateProduct(findProps: {}, updateProps: {}): Promise<boolean> {
@@ -68,10 +76,10 @@ export default class ProductsModel {
       throw new ErrAPI(Status.BAD_GATEWAY, noConnMess('mongo'));
     }
     //@ts-ignore
-    const prop = (Object.keys(updateProps))[0]
+    const prop = Object.keys(updateProps)[0];
     //@ts-ignore
-    const inc = updateProps[prop]
-    const result = await coll.updateOne(findProps, { '$inc': updateProps });
-    return result.acknowledged
+    const inc = updateProps[prop];
+    const result = await coll.updateOne(findProps, { $inc: updateProps });
+    return result.acknowledged;
   }
 }

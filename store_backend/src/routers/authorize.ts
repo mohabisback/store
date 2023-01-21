@@ -1,9 +1,9 @@
-import { Access } from '../interfaces/users';
+import { EnAccess } from '../types/users';
 import { Status } from '../ErrAPI';
-import { Request, Response, NextFunction } from '../interfaces/general';
+import { Request, Response, NextFunction } from '../types/general';
 import { ErrAsync } from '../ErrAPI';
 
-const roleAuth = (access: Access, message = '') => {
+const roleAuth = (access: EnAccess, message = '') => {
   if (message == '') {
     message = 'Not authorized to access this route';
   }

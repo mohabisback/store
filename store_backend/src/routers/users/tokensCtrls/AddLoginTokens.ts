@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
 import { Response } from 'express';
-import { User } from '../../../interfaces/users';
+import { TyUser } from '../../../types/users';
 
 //Add refresh & access tokens to response
-const AddLoginTokens = async (res: Response, tokenUser: User, refreshToken: string) => {
+const AddLoginTokens = async (res: Response, tokenUser: TyUser, refreshToken: string) => {
   if (refreshToken) {
     //add refreshToken to response
     res.cookie('refreshToken', refreshToken, {

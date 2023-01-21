@@ -1,8 +1,8 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import { Request } from '../../../interfaces/general';
+import { Request } from '../../../types/general';
 import { Response } from 'express';
-import { TokenSecret, getTokenUser, User } from '../../../interfaces/users';
+import { TyTokenSecret, getTokenUser, TyUser } from '../../../types/users';
 import AddLoginTokens from './AddLoginTokens';
 
 //import TokensModel from '../../../DB/mongoDB/store/TokensModel' //mongoDB model
@@ -12,13 +12,18 @@ const TokensModel = require(`../../../DB/${
 }/store/TokensModel`).default;
 
 //create token secret, add it to database, return refresh token
-const CreateTokens = async (req: Request, res: Response, dbUser: User, oldTokenSecret?: TokenSecret): Promise<void> => {
+const CreateTokens = async (
+  req: Request,
+  res: Response,
+  dbUser: TyUser,
+  oldTokenSecret?: TyTokenSecret,
+): Promise<void> => {
   try {
     const tokenUser = getTokenUser(dbUser);
     //secret for the jwt
     const secret = crypto.randomBytes(40).toString('hex');
 
-    const tokenSecret: TokenSecret = {
+    const tokenSecret: TyTokenSecret = {
       secret,
       email: tokenUser.email as string,
       ip: req.ip,

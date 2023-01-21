@@ -1,6 +1,6 @@
 import { ErrAPI, Status } from '../../../ErrAPI';
-import { Request, Response, NextFunction } from '../../../interfaces/general';
-import { Address } from '../../../interfaces/users';
+import { Request, Response, NextFunction } from '../../../types/general';
+import { TyAddress } from '../../../types/users';
 
 //import UsersModel from '../../../DB/mongoDB/store/UsersModel' //mongoDB model
 //import UsersModel from '../../../DB/pgDB/store/UsersModel' //pgDB model
@@ -18,7 +18,7 @@ const DefaultAddress = async (req: Request, res: Response, next: NextFunction) =
   //extract id, email
   const { id } = req.params;
   const idNum = parseInt(id);
-  let address: Address | null;
+  let address: TyAddress | null;
   if (id && Number.isInteger(idNum)) {
     address = await AddressesModel.getAddress({ id: idNum });
   } else {

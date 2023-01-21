@@ -1,6 +1,6 @@
 import { Status } from '../../../ErrAPI';
-import { NextFunction, Request, Response } from '../../../interfaces/general';
-import { OrderItemTemp } from '../../../interfaces/store';
+import { NextFunction, Request, Response } from '../../../types/general';
+import { TmOrderItem } from '../../../types/store';
 import { getQuery } from '../../_functions';
 
 //import OrderItemsModel from '../../../DB/mongoDB/store/OrderItemsModel' //mongoDB model
@@ -10,9 +10,15 @@ const OrderItemsModel = require(`../../../DB/${
 }/store/OrderItemsModel`).default;
 
 const GetOrderItems = async (req: Request, res: Response, next: NextFunction) => {
-  const query = getQuery(req.query, OrderItemTemp);
+  const query = getQuery(req.query, TmOrderItem);
 
-  const orderItems = await OrderItemsModel.getAllOrderItems(query.search, query.props, query.limit, query.page, query.sort);
+  const orderItems = await OrderItemsModel.searchOrderItems(
+    query.search,
+    query.props,
+    query.limit,
+    query.page,
+    query.sort,
+  );
 
   for (let orderItem of orderItems) {
     //remove props editor shouldn't see

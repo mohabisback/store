@@ -1,4 +1,4 @@
-type Query = { search?: string, page?: number; limit?: number; sort?: {}; props?: {} };
+type Query = { search?: string; page?: number; limit?: number; sort?: {}; props?: {} };
 
 export const getQuery = (reqQuery: any, temp: any): Query => {
   const query: Query = {};
@@ -128,19 +128,19 @@ export const cleanObject = (obj: object, temp: any = null, noKeys: string[] = []
 };
 
 //returns array of trigrams
-export const gramIt = (sentence:string) => {
-  let grams:string[] = []
+export const gramIt = (sentence: string) => {
+  let grams: string[] = [];
   let input = sentence.toLowerCase();
   let words = input.split(' ');
-  for (let word of words){
-    let chars = word.split("")
+  for (let word of words) {
+    let chars = word.split('');
     if (chars.length < 3) continue; //no bigrams allowed
-    chars.forEach((char, index)=>{
-      if (index < chars.length - 2){
-        grams.push(chars.slice(index, index + 3).join(""));
+    chars.forEach((char, index) => {
+      if (index < chars.length - 2) {
+        grams.push(chars.slice(index, index + 3).join(''));
       }
-    })
+    });
   }
   //to remove duplicate elements from the array
-  return grams.filter((item, ind, arr)=> ind === arr.indexOf(item)).join(' ')
-}
+  return grams.filter((item, ind, arr) => ind === arr.indexOf(item)).join(' ');
+};

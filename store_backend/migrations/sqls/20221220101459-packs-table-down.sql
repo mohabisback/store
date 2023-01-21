@@ -1,1 +1,1 @@
-DROP TABLE "packs";
+DROP TABLE IF EXISTS "packs";

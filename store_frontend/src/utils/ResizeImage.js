@@ -1,12 +1,12 @@
-import Resizer from 'react-image-file-resizer'
+import Resizer from 'react-image-file-resizer';
 
 const maxWidth = 500;
 const maxHeight = 500;
-const compressFormat = "JPEG";
+const compressFormat = 'JPEG';
 const quality = 100;
 const rotation = 0;
 //const callback = (uri) => { console.log(uri);this.setState({ newImage: uri });},
-const outputType = "file";
+const outputType = 'file';
 const minWidth = 50;
 const minHeight = 50;
 
@@ -21,8 +21,8 @@ const ResizeImage = async (file, callback) => {
     callback, // Is the callBack function of the resized new image URI.
     outputType, // Is the output type of the resized new image.
     minWidth, // Is the minWidth of the resized new image.
-    minHeight // Is the minHeight of the resized new image.
+    minHeight, // Is the minHeight of the resized new image.
   );
-}
+};
 
 export default ResizeImage;

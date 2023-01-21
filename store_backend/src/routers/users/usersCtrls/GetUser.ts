@@ -1,6 +1,6 @@
-import { Request, Response, EmailFormat, NextFunction } from '../../../interfaces/general';
+import { Request, Response, EmailFormat, NextFunction } from '../../../types/general';
 import { ErrAPI, Status } from '../../../ErrAPI';
-import { User, Access, Role } from '../../../interfaces/users';
+import { TyUser, EnAccess, EnRole } from '../../../types/users';
 import { getUserEmailOrId } from './_functions';
 import { cleanObject } from '../../_functions';
 import { sameUserAuth } from '../../authorize';
@@ -15,13 +15,13 @@ const UsersModel = require(`../../../DB/${
 const GetUser = async (req: Request, res: Response, next: NextFunction) => {
   //extract id, email
   let user = await getUserEmailOrId(req.params);
-
-  const unReadables: (keyof User)[] = ['password', 'verifyToken', 'passToken', 'passTokenExp'];
+  console.log('gotten user: ', user)
+  const unReadables: (keyof TyUser)[] = ['password', 'verifyToken', 'passToken', 'passTokenExp'];
   //change the role secret to string
-  user.role = Object.keys(Role)[Object.values(Role).indexOf(user.role as any)];
+  user.role = Object.keys(EnRole)[Object.values(EnRole).indexOf(user.role as any)];
 
   //check if there is superior access
-  if (req.user && req.user.role && Access.editor.toString().includes(req.user.role)) {
+  if (req.user && req.user.role && EnAccess.editor.toString().includes(req.user.role)) {
     //pass
   } else if (sameUserAuth(user.id, req.user?.id)) {
     //remove props default user shouldn't read
@@ -29,8 +29,9 @@ const GetUser = async (req: Request, res: Response, next: NextFunction) => {
   } else {
     throw new ErrAPI(Status.UNAUTHORIZED, 'Unauthorized.');
   }
+  console.log('user before clean: ', user)
   user = cleanObject(user, null, unReadables);
-  
-  res.status(Status.OK).send(user);
+  console.log('user after clean: ', user)
+  res.status(Status.OK).send({user, message: 'user is sent.'});
 };
 export default GetUser;

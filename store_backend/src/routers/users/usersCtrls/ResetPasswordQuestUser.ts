@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import { ErrAPI, Status } from '../../../ErrAPI';
-import { NextFunction, Request, Response } from '../../../interfaces/general';
-import { User } from '../../../interfaces/users';
+import { NextFunction, Request, Response } from '../../../types/general';
+import { TyUser } from '../../../types/users';
 import sendEmail from '../../../utils/sendEmail';
 
 //import UsersModel from '../../../DB/mongoDB/store/UsersModel' //mongoDB model
@@ -13,10 +13,12 @@ const UsersModel = require(`../../../DB/${
 
 const ResetPasswordQuestUser = async (req: Request, res: Response, next: NextFunction) => {
   //get email from body.user
-  const email: string|undefined = req.body.user.email;
-  if(!email){throw new ErrAPI(Status.BAD_REQUEST, 'Missing info.')}
+  const email: string | undefined = req.body.user.email;
+  if (!email) {
+    throw new ErrAPI(Status.BAD_REQUEST, 'Missing info.');
+  }
   //get user from database
-  let user: User | null = await UsersModel.getUser({ email }, undefined, undefined);
+  let user: TyUser | null = await UsersModel.getUser({ email }, undefined, undefined);
 
   if (!user) {
     // Don't send an Error that 'Account Not Found.'

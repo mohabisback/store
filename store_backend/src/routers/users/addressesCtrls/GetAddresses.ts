@@ -1,6 +1,6 @@
 import { Status } from '../../../ErrAPI';
-import { NextFunction, Request, Response } from '../../../interfaces/general';
-import { AddressTemp } from '../../../interfaces/users';
+import { NextFunction, Request, Response } from '../../../types/general';
+import { TmAddress } from '../../../types/users';
 import { getQueryProps, getQuery } from '../../_functions';
 
 //import AddressesModel from '../../../DB/mongoDB/store/AddressesModel' //mongoDB model
@@ -10,9 +10,15 @@ const AddressesModel = require(`../../../DB/${
 }/store/AddressesModel`).default;
 
 const GetAddresses = async (req: Request, res: Response, next: NextFunction) => {
-  const query = getQuery(req.query, AddressTemp);
+  const query = getQuery(req.query, TmAddress);
 
-  const addresses = await AddressesModel.getAllAddresses(query.search, query.props, query.limit, query.page, query.sort);
+  const addresses = await AddressesModel.searchAddresses(
+    query.search,
+    query.props,
+    query.limit,
+    query.page,
+    query.sort,
+  );
 
   for (let address of addresses) {
     //remove props editor shouldn't see

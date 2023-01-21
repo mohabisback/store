@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
-console.log(process.env.ENV)
+console.log(process.env.ENV);
 import express from 'express';
 import cors, { CorsOptions } from 'cors';
 import http from 'http';
@@ -19,8 +19,15 @@ import { ErrHandler, ErrAPI, Status } from './ErrAPI';
 import startPgClient from './DB/pgDB/pgClient';
 //Server
 const app = express();
+//proxy
 app.set('trust proxy', 1);
+
+//pug (jade)
+app.set('view engine', 'pug');
+app.set('views', './views/pug');
+
 const port = process.env.PORT || 5000;
+
 //MiddleWares
 app.use(helmet());
 const corsOptions: CorsOptions = {
@@ -58,16 +65,28 @@ app.use(AuthenticateTokens);
 app.use('/files', filesRouter);
 app.use('/users', usersRouter);
 app.use('/', storeRouter);
+
+app.route('/').get((req, res) => {
+  res.render('index');
+});
+
 app.use('*', () => {
   throw new ErrAPI(Status.NOT_FOUND, 'Page not found...');
 });
 
 app.use(ErrHandler);
 
-const server =  http.createServer(app);
-if (!process.env.ENV || !process.env.ENV?.includes('test')){
-  startMongoClient();
-  startPgClient();
+const server = http.createServer(app);
+
+//don't start the server if it is a test
+if (!process.env.ENV || !process.env.ENV?.includes('test')) {
+   
+  if(process.env.ENV && process.env.ENV.includes('pg')) {
+    startPgClient();
+  } else {
+    startMongoClient();
+  }
+
   server.listen(port, () => {
     console.log(`Server Listening, Port ${port}`);
   });

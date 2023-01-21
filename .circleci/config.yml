@@ -1,4 +1,3 @@
-
 workflows:
   version: 2.1
   main:
@@ -13,12 +12,12 @@ orbs:
   aws-cli: circleci/aws-cli@1.3.1
   eb: circleci/aws-elastic-beanstalk@1.0.0
 jobs:
-  build:    
+  build:
     branches:
       only:
         - master
     docker:
-      - image: "cimg/base:stable"
+      - image: 'cimg/base:stable'
     steps:
       - node/install
       - checkout
@@ -43,11 +42,11 @@ jobs:
       - run:
           name: Frontend deploy
           command: |
-            npm run frontend:deploy    
+            npm run frontend:deploy
       - run:
           name: Backend deploy
           command: |
-            npm run backend:deploy  
+            npm run backend:deploy
       - run:
           name: Backend env secrets
           command: |

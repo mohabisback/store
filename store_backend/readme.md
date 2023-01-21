@@ -21,6 +21,7 @@ This application is built by:
     As the sql relational database
 
 ### Sharp
+
     for resizing products images, before download and after upload
 
 ### Jasmine & Supertest
