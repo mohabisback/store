@@ -44,11 +44,11 @@ export const TmProduct = {
   colors: [EnColor.blue],
   keywords: 'a b', //string keywords to help in search, and not included in name, separated by space
   maxItems: 3, //max number of items to be bought in one order
-  img1: 'a', //external url or local name
-  img2: 'a',
-  img3: 'a',
-  img4: 'a',
-  img5: 'a',
+  image1: 'a', //external url or local name
+  image2: 'a',
+  image3: 'a',
+  image4: 'a',
+  image5: 'a',
   hidden: false,
   //programmatically added
   id: 3,

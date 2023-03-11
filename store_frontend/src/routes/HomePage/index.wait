@@ -1,0 +1,53 @@
+// import React from 'react'
+// import Slider from '../../utils/Slider'
+// import styled from 'styled-components'
+// import BookCard from '../../components/BookCard'
+// import BooksContext from '../../GlobalContexts/BooksContext';
+
+// const SectionStyled = styled.section`
+// height: 50vh;
+// max-height: 60vh;
+// min-height: 40vh;
+// width: 98vw;
+// max-width: 98vw;
+// min-width: 98vw;
+// margin: 2vh auto 0;
+// `
+// const Title = styled.div`
+// display: block;
+// height: 10%;
+// font-weight: bold;
+// font-size: 1.6em;
+// margin: 0 2vw;
+// color: ${({theme})=>theme.color.primary};
+// :hover{
+//   color: ${({theme})=>theme.color.primary2};
+// }
+// `
+// const SliderContainer = styled.div`
+// display: block;
+// height: 90%;
+// `
+// const HomePage = () => {
+//   const {books, } = React.useContext(BooksContext)
+//   return (
+//     <>
+//       {books &&
+//         books.map((group, indx)=>(
+//           <SectionStyled key={indx}>
+//             <Title>{group.title}</Title>
+//             <SliderContainer>
+//               <Slider
+//                  Cards ={group.books.map((book, index)=>(
+//                   <BookCard key={index} book={book}/>
+//                 ))} 
+//               ></Slider>
+//             </SliderContainer>
+//           </SectionStyled>
+//         ))
+//       }
+//     </>  
+// )
+// }
+
+// export default HomePage

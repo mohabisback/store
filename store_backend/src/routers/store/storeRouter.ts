@@ -6,6 +6,14 @@ import GetCategories from './categoriesCtrls/GetCategories';
 import GetCategory from './categoriesCtrls/GetCategory';
 import AddCategory from './categoriesCtrls/AddCategory';
 import UpdateCategory from './categoriesCtrls/UpdateCategory';
+import DeleteCategory from './categoriesCtrls/DeleteCategory';
+
+
+import GetRows from './tablesCtrls/GetRows';
+import GetRow from './tablesCtrls/GetRow';
+import AddRow from './tablesCtrls/AddRow';
+import UpdateRow from './tablesCtrls/UpdateRow';
+import DeleteRow from './tablesCtrls/DeleteRow';
 
 import GetProducts from './productsCtrls/GetProducts';
 import GetProduct from './productsCtrls/GetProduct';
@@ -29,7 +37,6 @@ import AddPack from './packsCtrls/AddPack';
 import UpdatePack from './packsCtrls/UpdatePack';
 
 import { ErrAsync } from '../../ErrAPI';
-import DeleteCategory from './categoriesCtrls/DeleteCategory';
 
 const router = express.Router({ mergeParams: true });
 
@@ -50,17 +57,18 @@ const router = express.Router({ mergeParams: true });
 
 //for details, id or title as param
 //products
-router.route('/products/index').get(ErrAsync(GetProducts));
-router.route('/products/:titleOrId').get(ErrAsync(GetProduct));
-router.route('/products/add').post(roleAuth(EnAccess.editor), ErrAsync(AddProduct));
-router.route('/products/:titleOrId').post(roleAuth(EnAccess.editor), ErrAsync(UpdateProduct));
+// router.route('/products/index').get(ErrAsync(GetProducts));
+// router.route('/products/:titleOrId').get(ErrAsync(GetProduct));
+// router.route('/products/add').post(roleAuth(EnAccess.editor), ErrAsync(AddProduct));
+// router.route('/products/:titleOrId').post(roleAuth(EnAccess.editor), ErrAsync(UpdateProduct));
 
 //categories
-router.route('/categories/index').get(ErrAsync(GetCategories));
-router.route('/categories/:titleOrId').get(ErrAsync(GetCategory));
-router.route('/categories/add').post(roleAuth(EnAccess.editor), ErrAsync(AddCategory));
-router.route('/categories/:titleOrId').post(roleAuth(EnAccess.editor), ErrAsync(UpdateCategory));
-router.route('/categories/:title').delete(roleAuth(EnAccess.editor), ErrAsync(DeleteCategory));
+// router.route('/categories/index').get(ErrAsync(GetCategories));
+// router.route('/categories/add').post(roleAuth(EnAccess.editor), ErrAsync(AddCategory));
+// router.route('/categories/:titleOrId').get(ErrAsync(GetCategory));
+// router.route('/categories/:titleOrId').post(roleAuth(EnAccess.editor), ErrAsync(UpdateCategory));
+// router.route('/categories/:title').delete(roleAuth(EnAccess.editor), ErrAsync(DeleteCategory));
+
 
 
 //cart items
@@ -83,5 +91,13 @@ router.route('/packs/index').get(roleAuth(EnAccess.user, 'Users only, please sig
 router.route('/packs/add').post(roleAuth(EnAccess.editor, 'Restricted.'), ErrAsync(AddPack));
 router.route('/packs/:id').post(roleAuth(EnAccess.editor, 'Restricted.'), ErrAsync(UpdatePack));
 router.route('/packs/:id').get(roleAuth(EnAccess.user, 'Users only, please sign in.'), ErrAsync(GetPack));
+
+
+//tables
+router.route('/:tableName/index').get(ErrAsync(GetRows));
+router.route('/:tableName').get(ErrAsync(GetRow));
+router.route('/:tableName/add').post(roleAuth(EnAccess.editor), ErrAsync(AddRow));
+router.route('/:tableName/:id').post(roleAuth(EnAccess.editor), ErrAsync(UpdateRow));
+router.route('/:tableName/:id').delete(roleAuth(EnAccess.editor), ErrAsync(DeleteRow));
 
 export default router;

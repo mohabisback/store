@@ -1,6 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import sharp from 'sharp';
+import util from 'util';
 import { Request, EnState } from '../../types/general';
 import { Response, NextFunction } from 'express';
 import FilesModel from '../../DB/mongoDB/files/FilesModel';
@@ -11,31 +12,37 @@ const router = express.Router({ mergeParams: true });
 
 const storage = multer.diskStorage({
   destination: function (req: Request, file, cb) {
-    let dest: string = '../assets/images/full';
+    let dest: string = 'src/assets/images/full';
     const images = ['image/png', 'image/jpeg'];
     if (images.indexOf(file.mimetype) === -1) {
-      dest = '../assets/files';
+      dest = 'src/assets/files';
     }
     cb(null, dest); //it doesn't make a directory if it is not there error happens
   },
   filename: function (req: Request, file, cb) {
-    const uniquePrefix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, uniquePrefix + '-' + file.originalname);
+    //const uniquePrefix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    console.log(file)
+    cb(null, file.originalname);
   },
 });
 
-const upload = multer({ storage: storage });
+const uploadJob = multer({ storage: storage }).single('file')
+const upload = util.promisify(uploadJob)
 
-router.route('/uploads/server').post(
-  upload.single('file'),
+router.route('/uploads/server/:filename').post(
   ErrAsync(async (req: Request, res: Response, next: NextFunction) => {
-    res.send('uploaded');
+    const {filename} = req.params
+    try{
+      await upload(req, res)
+      res.status(Status.OK).send({message: 'uploaded', url:'@backend/'+req.file.filename});
+    } catch(err) {console.log(err)}
   }),
 );
 
-router.route('/uploads/mongo').post(
+router.route('/uploads/mongo/:filename').post(
   ErrAsync(async (req: Request, res: Response, next: NextFunction) => {
-    await FilesModel.uploadFileFromRequest(req, res);
+    const {filename} = req.params
+    await FilesModel.uploadFileFromRequest(req, res, filename);
   }),
 );
 

@@ -20,7 +20,7 @@ const AddProduct = async (req: Request, res: Response, next: NextFunction) => {
   product = cleanObject(product, TmProduct, unEditables);
 
   //check essentials
-  if (!product || !product.title || !product.price || !product.img1) {
+  if (!product || !product.title || !product.price || !product.image1) {
     throw new ErrAPI(Status.BAD_REQUEST, 'Provide title, price & one image.');
   }
 

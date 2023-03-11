@@ -1149,12 +1149,7 @@ body {
 div {
   border: 0;
 }
-hr,
-img {
-  max-width: 100%;
-  border-style: none;
-  vertical-align: middle;
-}
+
 video {
   max-width: 100%;
 }

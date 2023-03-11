@@ -1,0 +1,31 @@
+import { Link } from "react-router-dom";
+
+export const SearchItem = ({ item, setDropdown, setQuery }) => {
+
+  return (
+  <li className={'nav-dropdown-item'} 
+  >
+    <Link className={'nav-link'}
+          to={`/books/${item.id}`}
+          aria-haspopup="menu"
+          onClick={(e)=>{setDropdown(false); setQuery('')}}
+    >{item.title}
+    </Link>
+  </li>
+);
+};
+export const SeeAll = ({ query, setDropdown, setQuery }) => {
+
+  return (
+  <li className={'nav-dropdown-item'} 
+  >
+    <Link className={'nav-link'}
+          to={`/search${query ? `?query=${query}` : ''}`}
+          aria-haspopup="menu"
+          onClick={(e)=>{setDropdown(false); setQuery('')}}
+    >See All...
+    </Link>
+  </li>
+);
+};
+

@@ -8,6 +8,7 @@ const roleAuth = (access: EnAccess, message = '') => {
     message = 'Not authorized to access this route';
   }
   return ErrAsync((req: Request, res: Response, next: NextFunction) => {
+    console.log(req.user?.role)
     if (req.user && req.user.role && access.toString().includes(req.user.role.toString())) {
       next();
     } else {

@@ -1,0 +1,110 @@
+// @ts-ignore
+
+import React from 'react'
+import styled from 'styled-components'
+import {Link} from 'react-router-dom'
+import Button from '../styles/elements/Button'
+import BooksContext from '../GlobalContexts/BooksContext'
+import {update} from '../services/BookAPI'
+import ZoomImage from '../utils/ZoomImage'
+
+const CardStyled = styled.div`
+border-radius: 3%;
+padding: 5px;
+${({theme})=>theme.buttons.default}
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+
+`
+const ImageStyled = styled(ZoomImage)`
+
+height: auto;
+max-height: 50%;
+width: auto;
+max-width: 100%;
+display: block;
+margin: 0 auto 2%;
+`
+const Title = styled.div`
+height: 20%;
+max-height: 20%;
+font-weight: bold;
+text-overflow: ellipsis;
+white-space: pre-wrap;
+align-self: center;
+`
+const Authors = styled.div`
+height: 15%;
+max-height: 15%;
+align-self: start;
+padding-left: 1vw;
+text-overflow: ellipsis;
+white-space: pre-wrap;
+`
+const Last = styled.div`
+height: 15%;
+display: flex;
+flex-direction: row;
+justify-content: space-around;
+align-items: center;
+`
+const LinkStyled = styled(Link)`
+height: 100%;`
+const ButtonStyled = styled(Button)`
+height: 100%;
+`
+
+
+const BookCard = ({book}) => {
+  const {moveBook} = React.useContext(BooksContext)
+  const [selectValue, setSelectValue] = React.useState('newBook')
+  
+  React.useEffect(()=>{
+    if(book.shelf){ setSelectValue(book.shelf)}
+  },[book.shelf])
+
+  const newShelfFunc = async (shelf) => {
+    moveBook({book, shelf})
+    await update(book, shelf)
+  }
+
+  let authors = 'Authors: '
+  if (book?.authors && book?.authors.length > 0){
+    authors = authors + book?.authors[0]
+    for (let i = 1; i < book.authors.length; i++){
+      authors = authors + ', ' + book.authors[i]
+    }
+  }
+  return (
+    <CardStyled as='div'>
+      {
+        book.imageLinks?.thumbnail
+        ?
+        <ImageStyled src={book.imageLinks.thumbnail} alt={book.title}/>
+        :
+        <Title>{book?.title}</Title> 
+      }
+      <Title>{book?.title}</Title>
+      <Authors>{authors}</Authors>
+      <Last>
+        <LinkStyled to={`/books/${book.id}`}>
+          <ButtonStyled primary>Details...</ButtonStyled>
+        </LinkStyled>
+
+        <ButtonStyled primary as='select' 
+          value={selectValue}
+          onChange={(e)=>{newShelfFunc(e.target.value)}}
+        >
+          <option value={'currentlyReading'}>Reading...</option>
+          <option value={'wantToRead'}>Wanted...</option>
+          <option value={'read'}>Done...</option>
+          <option value={'newBook'}>New...</option>
+        </ButtonStyled>
+      </Last>
+
+    </CardStyled>
+  )
+}
+
+export default BookCard

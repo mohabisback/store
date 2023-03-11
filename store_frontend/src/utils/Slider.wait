@@ -1,0 +1,127 @@
+import React from 'react';
+import styled from 'styled-components'
+import {MdChevronLeft, MdChevronRight} from 'react-icons/md'
+const AllWrapper = styled.div`
+width: 100%;
+height: 100%;
+overflow: hidden;
+position: relative;
+display: flex;
+justify-content: flex-start;
+align-content: center;
+align-items: center;
+flex-direction: row;
+flex-wrap: nowrap;
+
+`
+const Arrow = styled.div`
+width: 10vw;
+height: 10vw;
+display: flex;
+justify-content: center;
+align-items: center;
+background: white;
+border-radius: 100%;
+position: absolute;
+box-shadow: 2px 2px 2px rgb(0 0 0 / 12%);
+cursor: pointer;
+z-index: 10;
+opacity: 0.5;
+& > * {
+  width: 100%;
+  height: 100%;
+}
+:hover{
+  opacity: 1;
+}
+`
+const LeftArrow = styled(Arrow)`
+left: 0;
+`
+const RightArrow = styled(Arrow)`
+right: 0;
+`
+const SliderWrapper = styled.div`
+width: 100%;
+height: 100%;
+display: flex;
+align-items: center;
+flex-direction: row;
+flex-wrap: nowrap;
+justify-content: flex-start;
+align-content: center;
+overflow-x: scroll;
+overflow-y: hidden;
+scroll-behavior: smooth;
+
+-ms-overflow-style: none; /* for Internet Explorer, Edge */
+scrollbar-width: none; /* for Firefox */
+::-webkit-scrollbar {
+  display: none; /* for Chrome, Safari, and Opera */
+}
+/* cards (children not grandchildren)*/
+& > *{
+  height: 94%;
+  max-height: 94%;
+  margin: 2% 0 2% 2%;
+  max-width: 45vw;
+  min-width: 45vw;
+  @media screen and (min-width: 768px) {
+    max-width: 30vw;
+    min-width: 30vw;
+  }
+  @media screen and (min-width: 1024px) {
+    max-width: 20vw;
+    min-width: 20vw;
+  }
+}
+`
+
+const Slider = (props) => {
+  const {Cards} = props;
+  const {scrollable = false} = props;
+  const {autoSlide = 5000} = props;
+
+  const refSlider = React.useRef(null)
+  const [position, setPosition] = React.useState(0)
+
+  //scrolling
+  React.useEffect(()=>{
+    if (scrollable){
+      const slider = refSlider.current
+      const scroll = (e) => {
+        e.preventDefault();
+        slider.scrollLeft += e.deltaY;
+      }
+      slider.addEventListener("wheel", scroll);
+      return () => {
+        slider.removeEventListener("wheel", scroll);
+      }
+    }
+  },[scrollable])
+  const div = document.getElementsByTagName('div')[0]
+  const slideLeft = () =>{
+    const width = refSlider.current.children[0].offsetWidth
+    refSlider.current.scrollLeft -= width
+  }
+  const slideRight = () =>{
+    const width = refSlider.current.children[0].offsetWidth
+    refSlider.current.scrollLeft += width
+  }
+  return (
+    <AllWrapper>
+      <LeftArrow  onClick={()=>{slideLeft()}}>
+        <MdChevronLeft />
+      </LeftArrow>
+      <SliderWrapper ref = {refSlider} className='slider'>
+        {Cards}
+      </SliderWrapper>
+
+      <RightArrow onClick={()=>{slideRight()}}>
+        <MdChevronRight />
+      </RightArrow>
+    </AllWrapper>
+  )
+}
+
+export default Slider

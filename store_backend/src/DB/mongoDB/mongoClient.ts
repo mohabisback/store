@@ -12,6 +12,7 @@ import ProductsModel from './store/ProductsModel';
 import TokensModel from './store/TokensModel';
 import UsersModel from './store/UsersModel';
 import CategoriesModel from './store/CategoriesModel';
+import TablesModel from './store/TablesModel';
 import { dbDriver, dbResetOrUp, dbName } from '../dbState';
 import path from 'path';
 import fs from 'fs';
@@ -47,6 +48,7 @@ const startMongoClient = async (): Promise<void> => {
       await TokensModel.injectClient(client);
       await UsersModel.injectClient(client);
       await CategoriesModel.injectClient(client);
+      await TablesModel.injectClient(client);
 
       await adjustResetsAndUps(client.db(dbName));
       clientStarted = true

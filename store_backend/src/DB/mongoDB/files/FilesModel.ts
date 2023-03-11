@@ -29,14 +29,25 @@ export default class FilesModel {
     }
   }
 
-  
-  static async uploadFileFromRequest(req: Request, res: Response) {
+  static checkImage = async (filename:string):Promise<boolean> =>{
+    try{
+    const bucket = new GridFSBucket(db, { bucketName: 'images' });
+    const foundFiles = await bucket.find({ filename }).toArray();
+    if (foundFiles.length > 0) return true;
+    return false;
+    }catch{ return false}
+  }
+
+  static async uploadFileFromRequest(req: Request, res: Response, filename:string) {
+    if (await this.checkImage(filename)) {
+      return res.status(Status.OK).send({message:'Uploaded before, link sent.', url:'@backend/'+filename})
+    }
     try {
       const storage = new GridFsStorage({
         db: db as unknown as DbTypes,
         file: (req: Request, file) => {
-          const filename = Date.now() + '-' + Math.round(Math.random() * 1e9) + '-' + file.originalname;
-
+          //const filename = Date.now() + '-' + Math.round(Math.random() * 1e9) + '-' + file.originalname;
+          const filename = file.originalname
           const match = ['image/png', 'image/jpeg', 'image/jpg'];
           if (match.indexOf(file.mimetype) === -1) {
             return { filename, bucketName: 'files' };
@@ -52,7 +63,8 @@ export default class FilesModel {
       if (req.file == undefined) {
         res.send('No file to upload');
       }
-      res.send({ ...req.file, name: req.file.filename, type: req.file.contentType });
+      //res.send({ ...req.file, name: req.file.filename, type: req.file.contentType });
+      res.status(Status.OK).send({message:'Uploaded', url:'@backend/'+req.file.filename})
     } catch (err) {
       res.send(`Error while uploading: ${err}`);
     }
@@ -146,9 +158,7 @@ export default class FilesModel {
     try {
       const bucket = new GridFSBucket(db, { bucketName: 'images' });
       const foundFiles = await bucket.find({ filename }).toArray();
-      if (!foundFiles.length) {
-        return false;
-      }
+      if (!foundFiles.length) return false;
 
       let downloadStream = bucket.openDownloadStreamByName(filename);
       downloadStream.on('error', (err) => {

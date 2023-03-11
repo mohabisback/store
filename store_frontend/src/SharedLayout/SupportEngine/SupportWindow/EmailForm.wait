@@ -1,0 +1,91 @@
+// @ts-ignore
+//Dependencies
+import React, { useState } from 'react';
+//Styles
+import { styles } from '../styles';
+
+//import { LoadingOutlined } from '@ant-design/icons'
+
+import Avatar from '../Avatar';
+
+const EmailForm = ({ setSocketConnected }:{setSocketConnected:Function}) => {
+
+  const socket = {auth: {}, connected:false, connect: ()=>{}}
+
+  //Local Variables
+  const [email, setEmail] = useState('');
+  const [userName, setUserName] = useState('');
+
+  React.useEffect(() => {}, []);
+
+  function handleSubmit(ev:React.FormEvent<HTMLFormElement>) {
+    ev.preventDefault();
+    console.log(socket.auth);
+    socket.auth = { userName, email, userID: null };
+    console.log(socket.auth);
+    socket.connect();
+    setSocketConnected(true);
+  }
+
+  return (
+    <div
+      style={{
+        ...styles.emailFormWindow,
+      }}
+    >
+      <div style={{ height: '0px' }}>
+        <div style={{position: 'relative', ...styles.stripe} } />
+      </div>
+
+      <div style={{ position: 'absolute', height: '100%', width: '100%', textAlign: 'center' }}>
+        <Avatar
+          onClick={()=>{}}
+          style={{
+            position: 'relative',
+            left: 'calc(50% - 44px)',
+            top: '10%',
+          }}
+        />
+
+        <div style={{position: 'relative', ...styles.topText}}>
+          Welcome to my <br /> support 👋
+        </div>
+
+        <form
+          onSubmit={(e) => handleSubmit(e)}
+          style={{ position: 'relative', width: '100%', top: '19.75%' }}
+        >
+          <label>
+            Enter your name:{' '}
+            <input
+              type='text'
+              required
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              style={{textAlign: 'center', ...styles.emailInput}}
+            />
+          </label>
+          <label>
+            Enter your email:{' '}
+            <input
+              type='email'
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              
+              style={{textAlign: 'center', ...styles.emailInput}}
+            />
+          </label>
+          <button
+            type='submit'
+            onClick={(e) => handleSubmit}
+          >
+            Start Chat
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default EmailForm;

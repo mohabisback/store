@@ -1,9 +1,10 @@
-import { Request as ExpressRequest, Response, NextFunction } from 'express';
-import { TyCartItem, TyProduct } from './store';
-export { Response, NextFunction };
+import type { Request as ExpressRequest, Response as Res, NextFunction as Next } from 'express';
+
 import { TyUser } from './users';
 export const EmailFormat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
+export interface Response extends Res{}
+export interface NextFunction extends Next{}
 export interface Request extends ExpressRequest {
   user?: TyUser;
   file?: any; //for uploading

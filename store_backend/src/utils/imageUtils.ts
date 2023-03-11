@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
 
-const imagesDir = '../backend/src/assets/images';
+const imagesDir = '../store_backend/src/assets/images';
 const fullDir = '/full';
 const thumbsDir = '/thumbs';
 
@@ -46,6 +46,7 @@ export const checkImageInServer = async (
   }
   return null;
 };
+
 export const cloneThumb = async (pipeline: sharp.Sharp, fileName: string) => {
   const thumbPath: string = path.resolve(path.join(imagesDir, thumbsDir, fileName));
   pipeline.clone().toFile(thumbPath);

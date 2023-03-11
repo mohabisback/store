@@ -64,7 +64,7 @@ export const getQueryProps = (obj: object, temp: object): any => {
 //return a casted value according to template value
 //optional add$ turns id:'1' to id: {'$eq':1}
 //and turns addresses:'1,2,3' to addresses: {'$in':[1,2,3]}
-const castValue = (val: any, temp: any, add$: boolean = false): any => {
+export const castValue = (val: any, temp: any, add$: boolean = false): any => {
   if (typeof val === 'string' && val.includes(',')) {
     //array
     const arr: string[] = (val as string).split(',').map((a: string) => a.trim());

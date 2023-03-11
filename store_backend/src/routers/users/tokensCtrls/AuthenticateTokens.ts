@@ -16,22 +16,22 @@ const TokensModel = require(`../../../DB/${
 //if not authenticated req.user = null
 const AuthenticateTokens = async (req: Request, res: Response, next: NextFunction) => {
   //Authentication for testing & development purposes
-  if (process.env.ENV?.includes('owner')) {
-    req.user = { id: 1, email: 'mohab1@email.com', role: EnRole.owner };
-    return next();
-  } else if (process.env.ENV?.includes('admin')) {
-    req.user = { id: 2, email: 'mohab2@email.com', role: EnRole.admin };
-    return next();
-  } else if (process.env.ENV?.includes('editor')) {
-    req.user = { id: 3, email: 'mohab3@email.com', role: EnRole.editor };
-    return next();
-  } else if (process.env.ENV?.includes('service')) {
-    req.user = { id: 4, email: 'mohab4@email.com', role: EnRole.service };
-    return next();
-  } else if (process.env.ENV?.includes('user')) {
-    req.user = { id: 5, email: 'mohab5@email.com', role: EnRole.user };
-    return next();
-  }
+  // if (process.env.ENV?.includes('owner')) {
+  //   req.user = { id: 1, email: 'mohab1@email.com', role: EnRole.owner };
+  //   return next();
+  // } else if (process.env.ENV?.includes('admin')) {
+  //   req.user = { id: 2, email: 'mohab2@email.com', role: EnRole.admin };
+  //   return next();
+  // } else if (process.env.ENV?.includes('editor')) {
+  //   req.user = { id: 3, email: 'mohab3@email.com', role: EnRole.editor };
+  //   return next();
+  // } else if (process.env.ENV?.includes('service')) {
+  //   req.user = { id: 4, email: 'mohab4@email.com', role: EnRole.service };
+  //   return next();
+  // } else if (process.env.ENV?.includes('user')) {
+  //   req.user = { id: 5, email: 'mohab5@email.com', role: EnRole.user };
+  //   return next();
+  // }
   //get signed cookies from request
   const { refreshToken, accessToken } = await req.signedCookies;
 
